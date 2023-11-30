@@ -1,6 +1,8 @@
 import numpy as np
 import random
 from pongGame import pongGame
+import pickle
+import os
 
 class Agent:
 
@@ -76,4 +78,12 @@ class Agent:
             return self.height - 11
         else: 
             return value
+
+    def save(self, training_time: int = None) -> None:
+        """ Funzione per salvare il modello """
+        result = {'alpha': self.alpha, 'epsilon': self.epsilon, 'Q': self.Q, 'training_time': training_time}
         
+        # Salva come file pickle
+        with open("training.pkl", 'wb') as f:
+            pickle.dump(result, f)
+            print("File salvato correttamente")
