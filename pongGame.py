@@ -8,9 +8,9 @@ class pongGame:
 
     def __init__(self):
         """ Inizializzazione dei parametri di gioco"""
-        self.height = 768
-        self.width = 1024
-        self.game_speed = 2
+        self.width = 720
+        self.height = 576
+        self.game_speed = 10
 
         pygame.init()
         self.window = pygame.display.set_mode((self.width, self.height))
@@ -51,18 +51,28 @@ class pongGame:
         elif (action == 1 and self.opponent_position < self.height - 5 - self.paddle_length) :
             self.opponent_position = min(self.height - 5 - self.paddle_length, self.opponent_position + 5)
 
-        # Movimento della racchetta del giocatore
-        if (self.yball > self.player_position + self.paddle_length / 2):
-            self.player_position = min(self.height - self.paddle_length, self.player_position + 5)
-        elif self.yball < self.player_position + self.paddle_length / 2:
-            self.player_position = max(0, self.player_position - 5)
+        # # Movimento della racchetta del giocatore
+        # if (self.yball > self.player_position + self.paddle_length / 2):
+        #     self.player_position = min(self.height - self.paddle_length, self.player_position + 5)
+        # elif self.yball < self.player_position + self.paddle_length / 2:
+        #     self.player_position = max(0, self.player_position - 5)
 
-        # Colpo della palla
+        if random.random() < 0.4:  # Aggiungi un errore con probabilità del 10%
+            # Simula un errore nel movimento della racchetta
+            self.player_position = max(0, min(self.height - self.paddle_length, self.player_position - 5))
+        else:
+            # Movimento corretto della racchetta
+            if self.yball > self.player_position + self.paddle_length / 2:
+                self.player_position = min(self.height - self.paddle_length, self.player_position + 5)
+            elif self.yball < self.player_position + self.paddle_length / 2:
+                self.player_position = max(0, self.player_position - 5)
+
+        # Colpo della palla del player
         if (
             self.yball > self.player_position \
             and self.yball < self.player_position + self.paddle_length \
-            and self.xball > 30 \
-            and self.xball < 40
+            and self.xball > 31 \
+            and self.xball <= 41
         ):
             self.totalSpeed += 0.2
             self.angle = (
@@ -70,13 +80,14 @@ class pongGame:
                 * (self.yball - (self.player_position + self.paddle_length / 2))
                 / (self.paddle_length / 2)
             )
-            self.xball = 40
+            self.xball = 41
 
+        # Colpo della palla dell'opponent
         elif (
             self.yball > self.opponent_position \
             and self.yball < self.opponent_position + self.paddle_length \
-            and self.xball >= self.width - 40 \
-            and self.xball <= self.width - 30
+            and self.xball > self.width - 40 \
+            and self.xball < self.width - 31
         ):
             self.totalSpeed += 0.2
             self.angle = (
@@ -85,11 +96,11 @@ class pongGame:
                 * (self.yball - (self.opponent_position + self.paddle_length / 2))
                 / (self.paddle_length / 2)
             )
-            self.xball = self.width - 40
+            self.xball = self.width - 41
             reward = 1
 
         # se la palla è troppo a sinistra la racchetta ha perso 
-        if(self.xball < 40):
+        if(self.xball < 41):
             reward = 100
         # se la palla è troppo a destra la racchetta ha vinto
         elif(self.xball > self.width - 40):
@@ -113,10 +124,10 @@ class pongGame:
         # disegna le due racchette e la palla
         # disegno opponent
         pygame.draw.rect(self.window, (255, 255, 255),
-                            (self.width-40, self.opponent_position, 10, self.paddle_length))
+                            (self.width-41, self.opponent_position, 10, self.paddle_length))
         # disegno player
         pygame.draw.rect(self.window, (255, 255, 255),
-                            (30, self.player_position, 10, self.paddle_length))
+                            (31, self.player_position, 10, self.paddle_length))
         # disegno la palla
         pygame.draw.circle(self.window, (255, 255, 255),
                             (self.xball, self.yball), 5)

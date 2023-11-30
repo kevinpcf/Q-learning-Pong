@@ -4,9 +4,11 @@ from pongGame import pongGame
 
 class Agent:
 
-    def __init__(self, height, width, alpha=0.5, epsilon=0.6):
+    def __init__(self, width, height, alpha=0.5, epsilon=0.6):
         self.alpha = alpha
         self.epsilon = epsilon
+        self.height = height
+        self.width = width
 
         #Posizione y della racchetta, x della palla, y della palla, 3 sono le azioni (movimento sopra, sotto e colpo della palla)
         self.Q = np.zeros((height - 10, width - 80, height - 10, 3))
@@ -35,7 +37,6 @@ class Agent:
             else:
                 action = random.randint(0,2)
 
-            print(action)
             # svolgere le azioni
             reward = pong.takeAction(action)
 
@@ -53,8 +54,6 @@ class Agent:
                 self.alpha * (reward + max(self.Q[new_opponent_position, new_xball, new_yball]) - \
                     self.Q[opponent_position, xball, yball, action])
             
-            print(self.Q[opponent_position, xball, yball, action])
-            
             # FARE GESTIONE UPDATE STATI
 
 
@@ -66,15 +65,15 @@ class Agent:
 
     def normalize_x(self, val):
         value = int(val)
-        if(value > 943):
-            return 943
+        if(value > self.width - 81 ):
+            return self.width - 81
         else: 
             return value
         
     def normalize_y(self, val):
         value = int(val)
-        if(value > 757):
-            return 757
+        if(value > self.height - 11):
+            return self.height - 11
         else: 
             return value
         
