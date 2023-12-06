@@ -30,8 +30,7 @@ class Agent:
             xball = self.normalize_x(xball)
             yball = self.normalize_y(yball)
 
-            if xball != -10 and yball != -5:
-
+            if (xball != -10 and xball != -15):
                 action_values = self.Q[opponent_position, xball, yball]
 
                 # scelgo un valore randomico
@@ -42,17 +41,12 @@ class Agent:
                 # altrimenti faccio exploration
                 else:
                     action = random.randint(0,2)
-
-                # print(xball, " pre " , self.normalize_x(xball))
-                # svolgere le azioni
+                    
                 reward = pong.takeAction(action)
 
                 # inizializzo i nuovi stati
                 _, new_opponent_position, new_xball, new_yball = pong.getState()
 
-                # if(new_xball is None):
-                #     continue
-                # print(new_xball)
                 new_opponent_position = self.normalize_opponent(new_opponent_position)
                 new_xball = self.normalize_x(new_xball)
                 new_yball = self.normalize_y(new_yball)
@@ -61,11 +55,12 @@ class Agent:
                     self.Q[opponent_position, xball, yball, action] = self.Q[opponent_position, xball, yball, action] + \
                         self.alpha * (reward + (self.gamma * max(self.Q[new_opponent_position, new_xball, new_yball])) - \
                             self.Q[opponent_position, xball, yball, action])
-        
+            
             else: 
                 reward = pong.takeAction(action)
 
             if(reward == 100 or reward == -100):
+                print(reward)
                 finish = True
 
             pong.draw()
@@ -76,7 +71,7 @@ class Agent:
         if(value < 41):
             ret = -10
         elif(value > self.width - 41):
-            ret = -10
+            ret = -15
         elif(value <= self.width - 41):
             ret = value - 41
         return ret

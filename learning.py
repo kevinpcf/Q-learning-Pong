@@ -16,7 +16,7 @@ def progress_bar(progress: float):
 
 def main():
     agent = Agent(720, 576)
-    num_episodes = 2500
+    num_episodes = 1000
 
     print("\nINZIO TRAINING")
     print("Progresso:\n")

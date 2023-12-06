@@ -35,8 +35,9 @@ def normalize_opponent( val):
 
 def main():
     q_function = load()
+    print(q_function)
     # Creare una maschera booleana per selezionare elementi con azione pari a 2
-    mask = (q_function[:, :, :, 2] == 2)
+    mask = (q_function[:, :, :, 1] == 1)
 
     # Ottenere gli indici in cui la maschera è vera
     indices = np.where(mask)
