@@ -16,22 +16,20 @@ def progress_bar(progress: float):
 
 def main():
     agent = Agent(720, 576)
-    num_episodes = 5
+    num_episodes = 2500
 
     print("\nINZIO TRAINING")
     print("Progresso:\n")
-    win_count = []
-    start_train = time()
 
     # Eseguo gli episodi e salvo nel training
     for i in range(num_episodes):
+        # print(i)
         agent.run_learning_episode()
         progress_bar(float(i)/num_episodes)
         
         if(i == num_episodes-1):
-            agent.save(time()-start_train)
-    
-    end_train = time()
+            agent.save()
+
     progress_bar(1)
 
 if __name__ == "__main__":
