@@ -41,26 +41,24 @@ class Agent:
                 # altrimenti faccio exploration
                 else:
                     action = random.randint(0,2)
+            else:
+                action = 0
                     
-                reward = pong.takeAction(action)
+            reward = pong.takeAction(action)
 
-                # inizializzo i nuovi stati
-                _, new_opponent_position, new_xball, new_yball = pong.getState()
+            # inizializzo i nuovi stati
+            _, new_opponent_position, new_xball, new_yball = pong.getState()
 
-                new_opponent_position = self.normalize_opponent(new_opponent_position)
-                new_xball = self.normalize_x(new_xball)
-                new_yball = self.normalize_y(new_yball)
+            new_opponent_position = self.normalize_opponent(new_opponent_position)
+            new_xball = self.normalize_x(new_xball)
+            new_yball = self.normalize_y(new_yball)
 
-                if new_xball != -10 and new_yball != -5:
-                    self.Q[opponent_position, xball, yball, action] = self.Q[opponent_position, xball, yball, action] + \
-                        self.alpha * (reward + (self.gamma * max(self.Q[new_opponent_position, new_xball, new_yball])) - \
-                            self.Q[opponent_position, xball, yball, action])
-            
-            else: 
-                reward = pong.takeAction(action)
+            if new_xball != -10 and new_xball != -15:
+                self.Q[opponent_position, xball, yball, action] = self.Q[opponent_position, xball, yball, action] + \
+                    self.alpha * (reward + (self.gamma * max(self.Q[new_opponent_position, new_xball, new_yball])) - \
+                        self.Q[opponent_position, xball, yball, action])
 
             if(reward == 100 or reward == -100):
-                print(reward)
                 finish = True
 
             pong.draw()

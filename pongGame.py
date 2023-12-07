@@ -10,7 +10,7 @@ class pongGame:
         """ Inizializzazione dei parametri di gioco"""
         self.width = 720
         self.height = 576
-        self.game_speed = 0.4
+        self.game_speed = 1
 
         pygame.init()
         self.window = pygame.display.set_mode((self.width, self.height))
@@ -99,7 +99,7 @@ class pongGame:
                 self.xball = self.width - 41
                 reward = 10
 
-        if random.random() < 0.5:
+        if random.random() < 0.3:
             self.player_position = max(0, min(self.height - self.paddle_length, self.player_position - 8))
         else:
             if self.yball > self.player_position + self.paddle_length / 2:

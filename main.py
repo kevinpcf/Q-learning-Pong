@@ -35,9 +35,8 @@ def normalize_opponent( val):
 
 def main():
     q_function = load()
-    print(q_function)
     # Creare una maschera booleana per selezionare elementi con azione pari a 2
-    mask = (q_function[:, :, :, 1] == 1)
+    mask = (q_function[:, :, :, :])
 
     # Ottenere gli indici in cui la maschera è vera
     indices = np.where(mask)
@@ -47,33 +46,36 @@ def main():
         opponent_position = indices[0][i]
         xball = indices[1][i]
         yball = indices[2][i]
+        action = indices[3][i]
         value = q_function[opponent_position, xball, yball, 2]
 
-        print(f"Coordinate: ({opponent_position}, {xball}, {yball}), Valore con azione 2: {value}")
+        # print(f"Coordinate: ({opponent_position}, {xball}, {yball}), Valore con azione 2: {value}")
 
     print("size", q_function.size)
-    pong = pongGame()
-    
+
     print("Inizio del gioco")
-    finish = False
-    
-    while not finish:
-        _, opponent_position, xball, yball = pong.getState()
-        
-        opponent_position = normalize_opponent(opponent_position)
+    num_episodes = 10
+    for i in range(num_episodes):
+        pong = pongGame()
+        finish = False
 
-        xball = normalize_x(xball, pong.getWidth())
-        yball = normalize_y(yball, pong.getHeight())
+        while not finish:
+            _, opponent_position, xball, yball = pong.getState()
+            
+            opponent_position = normalize_opponent(opponent_position)
 
-        action_values = q_function[opponent_position, xball, yball]
-        action = np.argmax(action_values)
+            xball = normalize_x(xball, pong.getWidth())
+            yball = normalize_y(yball, pong.getHeight())
 
-        pong.draw() 
+            action_values = q_function[opponent_position, xball, yball]
+            action = np.argmax(action_values) 
 
-        reward = pong.takeAction(action)   
+            reward = pong.takeAction(action)   
 
-        if reward == 100 or reward == -100:
-            finish = True
+            if reward == 100 or reward == -100:
+                finish = True
+            
+            pong.draw()
     
 
 if __name__ == "__main__":
