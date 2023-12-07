@@ -30,10 +30,8 @@ class pongGame:
         self.player_position = self.height/2.4
         self.opponent_position = self.height/2.4
 
-        # paddle length
+        # lunghezza della racchetta
         self.paddle_length = self.height/6
-
-        self.player_score, self.opponent_score = 0, 0
 
     def getWidth(self): 
         return self.width
@@ -51,8 +49,8 @@ class pongGame:
         reward = -1
         
         # Movimento della racchetta dell'oppenent
-        if (action == 1 and self.opponent_position >= 5) :
-            self.opponent_position = max(5, self.opponent_position - 5)
+        if (action == 1 and self.opponent_position >= 65) :
+            self.opponent_position = max(65, self.opponent_position - 5)
 
             if (self.yball > self.opponent_position \
             and self.yball < self.opponent_position + self.paddle_length \
@@ -100,12 +98,12 @@ class pongGame:
                 reward = 10
 
         if random.random() < 0.3:
-            self.player_position = max(0, min(self.height - self.paddle_length, self.player_position - 8))
+            self.player_position = max(65, min(self.height - 5 - self.paddle_length, self.player_position - 5))
         else:
             if self.yball > self.player_position + self.paddle_length / 2:
-                self.player_position = min(self.height - self.paddle_length, self.player_position + 5)
+                self.player_position = min(self.height - 5 - self.paddle_length, self.player_position + 5)
             elif self.yball < self.player_position + self.paddle_length / 2:
-                self.player_position = max(0, self.player_position - 5)
+                self.player_position = max(65, self.player_position - 5)
 
         # Colpo della palla del player
         if (
@@ -122,15 +120,15 @@ class pongGame:
             )
             self.xball = 41
 
-        # se la palla è troppo a sinistra la racchetta ha perso 
+        # se la palla è troppo a sinistra opponent ha vinto 
         if((self.xball < 41) and not(self.yball > self.player_position and self.yball < self.player_position + self.paddle_length)):
             reward = 100
-        # se la palla è troppo a destra la racchetta ha vinto
+        # se la palla è troppo a destra player ha vinto
         elif(self.xball > self.width - 41):
             reward = -100
 
         # se la palla colpisce il bordo inferiore o superiore del gioco
-        if(self.yball <= 5 or self.yball >= self.height - 5):
+        if(self.yball <= 65 or self.yball >= self.height - 5):
             self.angle = -self.angle
 
         self.ballHDirection = self.totalSpeed*math.cos(self.angle)
@@ -141,17 +139,32 @@ class pongGame:
         return reward
         
         
-    def draw(self):
+    def draw(self, player_score, opponent_score):
         """Disegno delle racchette e della pallina"""
-        self.window.fill(0)
+        self.window.fill((141,70,16))
+
+        # punteggio player
+        font = pygame.font.Font(None, 50)
+        text_surface = font.render(str(player_score), False, (255, 51, 51))
+        self.window.blit(text_surface, (self.width/2 - 150, 16))
+
+        # punteggio opponent
+        font = pygame.font.Font(None, 50)
+        text_surface = font.render(str(opponent_score), False, (0, 204, 0))
+        self.window.blit(text_surface, (self.width/2 + 150, 16))
+
+        # disegno linea per punteggio
+        pygame.draw.line(self.window, (255, 255, 255), (0, 60), (self.width, 60), 5)
+        pygame.draw.line(self.window, (255, 255, 255), (0, self.height-5), (self.width, self.height-5), 5)
+
         # disegno la palla
         pygame.draw.circle(self.window, (255, 255, 255),
                             (self.xball, self.yball), 5)
-        # disegno opponent
-        pygame.draw.rect(self.window, (255, 255, 255),
-                            (self.width-41, self.opponent_position, 10, self.paddle_length))
         # disegno player
-        pygame.draw.rect(self.window, (255, 255, 255),
+        pygame.draw.rect(self.window, (255, 51, 51),
                             (31, self.player_position, 10, self.paddle_length))
+        # disegno opponent
+        pygame.draw.rect(self.window, (0, 204, 0),
+                            (self.width-41, self.opponent_position, 10, self.paddle_length))
         # aggiorna il display
         pygame.display.flip()

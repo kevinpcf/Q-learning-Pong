@@ -7,7 +7,7 @@ def load():
     result = joblib.load("training.joblib")
         
     # Recupera la matrice Q
-    return result['Q']
+    return result['Q'], result['player_score'], result['opponent_score']
 
 def normalize_x(val, width):
     ret = 0
@@ -24,17 +24,19 @@ def normalize_y( val, height):
     value = int(val) 
     if(value > height - 6):
         return -5
-    elif(value < 5):
+    elif(value < 65):
         return -5
     else: 
-        return value - 5
+        return value - 65
 
 def normalize_opponent( val):
     value = int(val / 5)
-    return value - 1
+    return value - 13
 
 def main():
-    q_function = load()
+    [q_function, player_score, opponent_score] = load()
+    print("Player", player_score)
+    print("Opponent", opponent_score)
     # Creare una maschera booleana per selezionare elementi con azione pari a 2
     mask = (q_function[:, :, :, :])
 
@@ -54,8 +56,10 @@ def main():
     print("size", q_function.size)
 
     print("Inizio del gioco")
-    num_episodes = 10
-    for i in range(num_episodes):
+    player_score = 0
+    opponent_score = 0
+
+    while (player_score < 21 and opponent_score < 21) :
         pong = pongGame()
         finish = False
 
@@ -72,10 +76,14 @@ def main():
 
             reward = pong.takeAction(action)   
 
-            if reward == 100 or reward == -100:
+            if(reward == 100):
+                opponent_score = opponent_score + 1
+                finish = True
+            elif(reward == -100):
+                player_score = player_score + 1
                 finish = True
             
-            pong.draw()
+            pong.draw(player_score, opponent_score)
     
 
 if __name__ == "__main__":

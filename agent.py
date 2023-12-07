@@ -14,9 +14,13 @@ class Agent:
         self.height = height
         self.width = width
 
+        self.player_score = 0
+        self.opponent_score = 0
+
         #Posizione y della racchetta, x della palla, y della palla, 3 sono le azioni (movimento sopra, sotto e colpo della palla)
-        dimension_opponent = int((height - (height/6) - 5) / 5)
-        self.Q = np.zeros((dimension_opponent, width - 80, height - 10, 3))
+        dimension_opponent = int((height - (height/6) - 65) / 5)
+        print("DImension", dimension_opponent)
+        self.Q = np.zeros((dimension_opponent, width - 80, height - 70, 3))
 
     def run_learning_episode(self):
         pong = pongGame()
@@ -58,10 +62,14 @@ class Agent:
                     self.alpha * (reward + (self.gamma * max(self.Q[new_opponent_position, new_xball, new_yball])) - \
                         self.Q[opponent_position, xball, yball, action])
 
-            if(reward == 100 or reward == -100):
+            if(reward == 100):
+                self.opponent_score = self.opponent_score + 1
+                finish = True
+            elif(reward == -100):
+                self.player_score = self.player_score + 1
                 finish = True
 
-            pong.draw()
+            pong.draw(self.player_score, self.opponent_score)
     
     def normalize_x(self, val):
         ret = 0
@@ -78,18 +86,18 @@ class Agent:
         value = int(val) 
         if(value > self.height - 6):
             return -5
-        elif(value < 5):
+        elif(value < 65):
             return -5
         else: 
-            return value - 5
+            return value - 65
     
     def normalize_opponent(self, val):
         value = int(val / 5)
-        return value - 1
+        return value - 13
 
     def save(self):
         """ Funzione per salvare il modello """
-        result = {'Q': self.Q}
+        result = {'Q': self.Q, 'player_score': self.player_score, 'opponent_score': self.opponent_score}
 
         # Salva come file joblib con compressione
         joblib.dump(result, "training.joblib", compress=('zlib', 3))
