@@ -27,8 +27,8 @@ class pongGame:
         self.ballVDirection = self.totalSpeed*math.sin(self.angle)
 
         # pozione delle racchette
-        self.player_position = self.height/2.4
-        self.opponent_position = self.height/2.4
+        self.agent_1_position = self.height/2.4
+        self.agent_2_position = self.height/2.4
 
         # lunghezza della racchetta
         self.paddle_length = self.height/6
@@ -43,89 +43,118 @@ class pongGame:
         """Ritorna i valori degli stati (posizione della racchetta player,
         posizione della racchetta opponent, coordinata x della palla e coordinata y della palla)"""
 
-        return np.array([self.player_position, self.opponent_position, self.xball, self.yball])
+        return np.array([self.agent_1_position, self.agent_2_position, self.xball, self.yball])
 
-    def takeAction(self, action):
-        reward = -1
+    def takeAction(self, action1, action2):
+        reward1 = -1
+        reward2 = -1
         
-        # Movimento della racchetta dell'oppenent
-        if (action == 1 and self.opponent_position >= 65) :
-            self.opponent_position = max(65, self.opponent_position - 5)
+        # Movimento della racchetta dell'opponent
+        if (action1 == 1 and self.agent_1_position >= 65) :
+            self.agent_1_position = max(65, self.agent_1_position - 5)
 
-            if (self.yball > self.opponent_position \
-            and self.yball < self.opponent_position + self.paddle_length \
-            and self.xball > self.width - 41 \
-            and self.xball < self.width - 30):
-                self.totalSpeed += 0.2
-                self.angle = (
-                    math.pi
-                    - (math.pi / 4)
-                    * (self.yball - (self.opponent_position + self.paddle_length / 2))
-                    / (self.paddle_length / 2)
-                )
-                self.xball = self.width - 41
-                reward = 10
-        
-        elif (action == 2 and self.opponent_position < self.height - 5 - self.paddle_length) :
-            self.opponent_position = min(self.height - 5 - self.paddle_length, self.opponent_position + 5)
-            if (self.yball > self.opponent_position \
-            and self.yball < self.opponent_position + self.paddle_length \
-            and self.xball > self.width - 41 \
-            and self.xball < self.width - 30):
-                self.totalSpeed += 0.2
-                self.angle = (
-                    math.pi
-                    - (math.pi / 4)
-                    * (self.yball - (self.opponent_position + self.paddle_length / 2))
-                    / (self.paddle_length / 2)
-                )
-                self.xball = self.width - 41
-                reward = 10
-
-        elif(action == 0):
-            if(self.yball > self.opponent_position \
-            and self.yball < self.opponent_position + self.paddle_length \
-            and self.xball > self.width - 41 \
-            and self.xball < self.width - 30):
-                self.totalSpeed += 0.2
-                self.angle = (
-                    math.pi
-                    - (math.pi / 4)
-                    * (self.yball - (self.opponent_position + self.paddle_length / 2))
-                    / (self.paddle_length / 2)
-                )
-                self.xball = self.width - 41
-                reward = 10
-
-        if random.random() < 0.3:
-            self.player_position = max(65, min(self.height - 5 - self.paddle_length, self.player_position - 5))
-        else:
-            if self.yball > self.player_position + self.paddle_length / 2:
-                self.player_position = min(self.height - 5 - self.paddle_length, self.player_position + 5)
-            elif self.yball < self.player_position + self.paddle_length / 2:
-                self.player_position = max(65, self.player_position - 5)
-
-        # Colpo della palla del player
-        if (
-            self.yball > self.player_position \
-            and self.yball < self.player_position + self.paddle_length \
+            if (self.yball > self.agent_1_position \
+            and self.yball < self.agent_1_position + self.paddle_length \
             and self.xball > 30 \
-            and self.xball < 41
-        ):
-            self.totalSpeed += 0.2
-            self.angle = (
-                (math.pi / 4)
-                * (self.yball - (self.player_position + self.paddle_length / 2))
-                / (self.paddle_length / 2)
-            )
-            self.xball = 41
+            and self.xball < 41):
+                self.totalSpeed += 0.2
+                self.angle = (
+                    math.pi
+                    - (math.pi / 4)
+                    * (self.yball - (self.agent_1_position + self.paddle_length / 2))
+                    / (self.paddle_length / 2)
+                )
+                self.xball = 41
+                reward1 = 10
+        
+        elif (action1 == 2 and self.agent_1_position < self.height - 5 - self.paddle_length) :
+            self.agent_1_position = min(self.height - 5 - self.paddle_length, self.agent_1_position + 5)
+            if (self.yball > self.agent_1_position \
+            and self.yball < self.agent_1_position + self.paddle_length \
+            and self.xball > 30 \
+            and self.xball < 41):
+                self.totalSpeed += 0.2
+                self.angle = (
+                    math.pi
+                    - (math.pi / 4)
+                    * (self.yball - (self.agent_1_position + self.paddle_length / 2))
+                    / (self.paddle_length / 2)
+                )
+                self.xball = 41
+                reward1 = 10
+
+        elif(action1 == 0):
+            if(self.yball > self.agent_1_position \
+            and self.yball < self.agent_1_position + self.paddle_length \
+            and self.xball > 30 \
+            and self.xball < 41):
+                self.totalSpeed += 0.2
+                self.angle = (
+                    math.pi
+                    - (math.pi / 4)
+                    * (self.yball - (self.agent_1_position + self.paddle_length / 2))
+                    / (self.paddle_length / 2)
+                )
+                self.xball = 41
+                reward1 = 10
+
+        # Movimento della racchetta dell'opponent
+        if (action2 == 1 and self.agent_2_position >= 65) :
+            self.agent_2_position = max(65, self.agent_2_position - 5)
+
+            if (self.yball > self.agent_2_position \
+            and self.yball < self.agent_2_position + self.paddle_length \
+            and self.xball > self.width - 41 \
+            and self.xball < self.width - 30):
+                self.totalSpeed += 0.2
+                self.angle = (
+                    math.pi
+                    - (math.pi / 4)
+                    * (self.yball - (self.agent_2_position + self.paddle_length / 2))
+                    / (self.paddle_length / 2)
+                )
+                self.xball = self.width - 41
+                reward2 = 10
+        
+        elif (action2 == 2 and self.agent_2_position < self.height - 5 - self.paddle_length) :
+            self.agent_2_position = min(self.height - 5 - self.paddle_length, self.agent_2_position + 5)
+            if (self.yball > self.agent_2_position \
+            and self.yball < self.agent_2_position + self.paddle_length \
+            and self.xball > self.width - 41 \
+            and self.xball < self.width - 30):
+                self.totalSpeed += 0.2
+                self.angle = (
+                    math.pi
+                    - (math.pi / 4)
+                    * (self.yball - (self.agent_2_position + self.paddle_length / 2))
+                    / (self.paddle_length / 2)
+                )
+                self.xball = self.width - 41
+                reward2 = 10
+
+        elif(action2 == 0):
+            if(self.yball > self.agent_2_position \
+            and self.yball < self.agent_2_position + self.paddle_length \
+            and self.xball > self.width - 41 \
+            and self.xball < self.width - 30):
+                self.totalSpeed += 0.2
+                self.angle = (
+                    math.pi
+                    - (math.pi / 4)
+                    * (self.yball - (self.agent_2_position + self.paddle_length / 2))
+                    / (self.paddle_length / 2)
+                )
+                self.xball = self.width - 41
+                reward2 = 10
 
         # se la palla è troppo a sinistra opponent ha vinto 
-        if((self.xball < 41) and not(self.yball > self.player_position and self.yball < self.player_position + self.paddle_length)):
-            reward = 100
+        if((self.xball < 41) and not(self.yball > self.agent_1_position and self.yball < self.agent_1_position + self.paddle_length)):
+            reward1 = -100 
+            reward2 = 100
         # se la palla è troppo a destra player ha vinto
         elif(self.xball > self.width - 41):
-            reward = -100
+            reward1 = 100
+            reward2 = -100
 
         # se la palla colpisce il bordo inferiore o superiore del gioco
         if(self.yball <= 65 or self.yball >= self.height - 5):
@@ -136,7 +165,7 @@ class pongGame:
         self.xball = self.xball+self.ballHDirection
         self.yball = self.yball+self.ballVDirection
         
-        return reward
+        return reward1, reward2
         
         
     def draw(self, player_score, opponent_score):
@@ -162,9 +191,9 @@ class pongGame:
                             (self.xball, self.yball), 5)
         # disegno player
         pygame.draw.rect(self.window, (255, 51, 51),
-                            (31, self.player_position, 10, self.paddle_length))
+                            (31, self.agent_1_position, 10, self.paddle_length))
         # disegno opponent
         pygame.draw.rect(self.window, (0, 204, 0),
-                            (self.width-41, self.opponent_position, 10, self.paddle_length))
+                            (self.width-41, self.agent_2_position, 10, self.paddle_length))
         # aggiorna il display
         pygame.display.flip()
