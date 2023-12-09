@@ -1,13 +1,14 @@
 import numpy as np
 import joblib
 from pongGame import pongGame
+import sys, time
 
-def load():
+def load(filename):
     """Funzione per caricare il modello salvato"""
-    result = joblib.load("training.joblib")
+    result = joblib.load(filename)
         
     # Recupera la matrice Q
-    return result['Q'], result['player_score'], result['opponent_score']
+    return result['agent_1'], result['agent_2'], result['agent_1_score'], result['agent_2_score']
 
 def normalize_x(val, width):
     ret = 0
@@ -20,7 +21,7 @@ def normalize_x(val, width):
         ret = value - 41
     return ret
         
-def normalize_y( val, height):
+def normalize_y(val, height):
     value = int(val) 
     if(value > height - 6):
         return -5
@@ -34,56 +35,49 @@ def normalize_opponent( val):
     return value - 13
 
 def main():
-    [q_function, player_score, opponent_score] = load()
-    print("Player", player_score)
-    print("Opponent", opponent_score)
-    # Creare una maschera booleana per selezionare elementi con azione pari a 2
-    mask = (q_function[:, :, :, :])
+    args = sys.argv[1:]
+    if(len(args) == 1 and args[0] == "-q"):
+        filename = "training_q_agents.joblib"
+    elif(len(args) == 1 and args[0] == "-sarsa"):
+        filename = "training_sarsa_agents.joblib"
+    else:
+        filename = "training_q_sarsa_agents.joblib"
 
-    # Ottenere gli indici in cui la maschera è vera
-    indices = np.where(mask)
-
-    # Stampa delle coordinate e dei valori corrispondenti
-    for i in range(len(indices[0])):
-        opponent_position = indices[0][i]
-        xball = indices[1][i]
-        yball = indices[2][i]
-        action = indices[3][i]
-        value = q_function[opponent_position, xball, yball, 2]
-
-        # print(f"Coordinate: ({opponent_position}, {xball}, {yball}), Valore con azione 2: {value}")
-
-    print("size", q_function.size)
+    [agent_1, agent_2, agent_1_score, agent_2_score] = load(filename)
 
     print("Inizio del gioco")
-    player_score = 0
-    opponent_score = 0
+    agent_1_score = 0
+    agent_2_score = 0
 
-    while (player_score < 21 and opponent_score < 21) :
+    while (agent_1_score < 21 and agent_2_score < 21) :
         pong = pongGame()
         finish = False
 
         while not finish:
-            _, opponent_position, xball, yball = pong.getState()
+            agent_1_position, agent_2_position, xball, yball = pong.getState()
             
-            opponent_position = normalize_opponent(opponent_position)
-
+            agent_1_position = normalize_opponent(agent_1_position)
+            agent_2_position = normalize_opponent(agent_2_position)
             xball = normalize_x(xball, pong.getWidth())
             yball = normalize_y(yball, pong.getHeight())
 
-            action_values = q_function[opponent_position, xball, yball]
-            action = np.argmax(action_values) 
+            action_values_1 = agent_1[agent_1_position, xball, yball]
+            action_values_2 = agent_2[agent_2_position, xball, yball]
+            action1 = np.argmax(action_values_1) 
+            action2 = np.argmax(action_values_2) 
 
-            reward = pong.takeAction(action)   
+            reward1, reward2 = pong.takeAction(action1, action2)   
 
-            if(reward == 100):
-                opponent_score = opponent_score + 1
+            if(reward1 == 100):
+                agent_1_score = agent_1_score + 1
                 finish = True
-            elif(reward == -100):
-                player_score = player_score + 1
+                time.sleep(0.2)
+            elif(reward2 == 100):
+                agent_2_score = agent_2_score + 1
                 finish = True
+                time.sleep(0.2)
             
-            pong.draw(player_score, opponent_score)
+            pong.draw(agent_1_score, agent_2_score)
     
 
 if __name__ == "__main__":

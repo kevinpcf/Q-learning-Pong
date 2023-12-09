@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class Agent(ABC):
 
-    def __init__(self, width, height, gamma=0.5, alpha=0.5):
+    def __init__(self, width, height, gamma, alpha):
         self.alpha = alpha
         self.gamma = gamma
         self.height = height
@@ -34,9 +34,8 @@ class Agent(ABC):
         value = int(val / 5)
         return value - 13
             
-class AgentQ(Agent):
-    
-    def __init__(self, width, height, gamma=0.5, alpha=0.5, epsilon=0.2):
+class AgentQ(Agent):    
+    def __init__(self, width, height, gamma, alpha, epsilon):
         super().__init__(width=width, height=height, gamma=gamma, alpha=alpha)
         self.epsilon = epsilon
 
@@ -48,13 +47,12 @@ class AgentQ(Agent):
         return self.Q
 
 class AgentSarsa(Agent):
-    def __init__(self, width, height, gamma=0.5, alpha=0.5):
+    def __init__(self, width, height, gamma, alpha):
         super().__init__(width=width, height=height, gamma=gamma, alpha=alpha)
 
         #Posizione y della racchetta, x della palla, y della palla, 3 sono le azioni (movimento sopra, sotto e colpo della palla)
         dimension_opponent = int((height - (height/6) - 65) / 5)
-        self.Sarsa = np.zeros((dimension_opponent, width - 80, height - 70, 3))
+        self.sarsa = np.zeros((dimension_opponent, width - 80, height - 70, 3))
 
-
-        
-
+    def getSarsa(self):
+        return self.sarsa

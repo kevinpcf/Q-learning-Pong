@@ -1,6 +1,5 @@
 import math
 import random
-
 import numpy as np
 import pygame
 
@@ -21,10 +20,14 @@ class pongGame:
         self.yball = self.height/2
 
         # velocità della palla e angolazione
-        self.angle = random.random()*0.5*math.pi+0.75*math.pi
+        direction = random.choice([0, 1])
+        self.angle = random.random() * 0.5 * math.pi + 0.75 * math.pi
+        if direction == 1:
+            self.angle = random.random() * 0.25 * math.pi
+
         self.totalSpeed = self.game_speed
-        self.ballHDirection = self.totalSpeed*math.cos(self.angle)
-        self.ballVDirection = self.totalSpeed*math.sin(self.angle)
+        self.ballHDirection = self.totalSpeed * math.cos(self.angle)
+        self.ballVDirection = self.totalSpeed * math.sin(self.angle)
 
         # pozione delle racchette
         self.agent_1_position = self.height/2.4
@@ -49,7 +52,7 @@ class pongGame:
         reward1 = -1
         reward2 = -1
         
-        # Movimento della racchetta dell'opponent
+        # Movimento della racchetta del player
         if (action1 == 1 and self.agent_1_position >= 65) :
             self.agent_1_position = max(65, self.agent_1_position - 5)
 
@@ -59,8 +62,7 @@ class pongGame:
             and self.xball < 41):
                 self.totalSpeed += 0.2
                 self.angle = (
-                    math.pi
-                    - (math.pi / 4)
+                    (math.pi / 4)
                     * (self.yball - (self.agent_1_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
@@ -75,8 +77,7 @@ class pongGame:
             and self.xball < 41):
                 self.totalSpeed += 0.2
                 self.angle = (
-                    math.pi
-                    - (math.pi / 4)
+                    (math.pi / 4)
                     * (self.yball - (self.agent_1_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
@@ -90,12 +91,11 @@ class pongGame:
             and self.xball < 41):
                 self.totalSpeed += 0.2
                 self.angle = (
-                    math.pi
-                    - (math.pi / 4)
+                    (math.pi / 4)
                     * (self.yball - (self.agent_1_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
-                self.xball = 41
+                self.xball = 42
                 reward1 = 10
 
         # Movimento della racchetta dell'opponent
@@ -148,7 +148,7 @@ class pongGame:
                 reward2 = 10
 
         # se la palla è troppo a sinistra opponent ha vinto 
-        if((self.xball < 41) and not(self.yball > self.agent_1_position and self.yball < self.agent_1_position + self.paddle_length)):
+        if(self.xball < 41):
             reward1 = -100 
             reward2 = 100
         # se la palla è troppo a destra player ha vinto

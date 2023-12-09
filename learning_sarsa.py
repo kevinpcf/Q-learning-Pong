@@ -1,8 +1,7 @@
 from time import time
 import numpy as np
-from agent import AgentQ
-from episode import run_learning_episode_Q, save
-
+from agent import AgentSarsa
+from episode import run_learning_episode_sarsa, save
 
 def progress_bar(progress: float):
     """ Funzione per visualizzare il progresso del training """
@@ -17,8 +16,8 @@ def progress_bar(progress: float):
     print(line)
 
 def main():
-    agent_1 = AgentQ(720, 576, 0.7, 0.3, 0.2)
-    agent_2 = AgentQ(720, 576, 0.7, 0.3, 0.2)
+    agent_1 = AgentSarsa(720, 576, 0.7, 0.3)
+    agent_2 = AgentSarsa(720, 576, 0.7, 0.3)
 
     num_episodes = 30000
 
@@ -28,7 +27,7 @@ def main():
     # Eseguo gli episodi e salvo nel training
     for i in range(num_episodes):
     
-        run_learning_episode_Q(agent_1, agent_2)
+        run_learning_episode_sarsa(agent_1, agent_2)
         progress_bar(float(i)/num_episodes)
         
         if(i == num_episodes-1):
