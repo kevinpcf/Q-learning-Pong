@@ -29,7 +29,7 @@ def main():
     for i in range(num_episodes):
     
         run_learning_episode_q_sarsa(agent_1, agent_2)
-        progress_bar(float(i)/num_episodes)
+        # progress_bar(float(i)/num_episodes)
         
         if(i == num_episodes-1):
             save(agent_1, agent_2)

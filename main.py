@@ -14,9 +14,9 @@ def normalize_x(val, width):
     ret = 0
     value = int(val)
     if(value < 41):
-        ret = -10
+        ret = 0
     elif(value > width - 41):
-        ret = -10
+        ret = width - 81
     elif(value <= width - 41):
         ret = value - 41
     return ret

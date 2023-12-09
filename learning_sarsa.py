@@ -19,7 +19,7 @@ def main():
     agent_1 = AgentSarsa(720, 576, 0.7, 0.3)
     agent_2 = AgentSarsa(720, 576, 0.7, 0.3)
 
-    num_episodes = 30000
+    num_episodes = 3
 
     print("\nINZIO TRAINING")
     print("Progresso:\n")
@@ -28,12 +28,12 @@ def main():
     for i in range(num_episodes):
     
         run_learning_episode_sarsa(agent_1, agent_2)
-        progress_bar(float(i)/num_episodes)
+        # progress_bar(float(i)/num_episodes)
         
         if(i == num_episodes-1):
             save(agent_1, agent_2)
 
-    progress_bar(1)
+    # progress_bar(1)
 
 if __name__ == "__main__":
     main()

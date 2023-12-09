@@ -59,7 +59,7 @@ class pongGame:
             if (self.yball > self.agent_1_position \
             and self.yball < self.agent_1_position + self.paddle_length \
             and self.xball > 30 \
-            and self.xball < 41):
+            and self.xball <= 41):
                 self.totalSpeed += 0.2
                 self.angle = (
                     (math.pi / 4)
@@ -74,7 +74,7 @@ class pongGame:
             if (self.yball > self.agent_1_position \
             and self.yball < self.agent_1_position + self.paddle_length \
             and self.xball > 30 \
-            and self.xball < 41):
+            and self.xball <= 41):
                 self.totalSpeed += 0.2
                 self.angle = (
                     (math.pi / 4)
@@ -88,7 +88,7 @@ class pongGame:
             if(self.yball > self.agent_1_position \
             and self.yball < self.agent_1_position + self.paddle_length \
             and self.xball > 30 \
-            and self.xball < 41):
+            and self.xball <= 41):
                 self.totalSpeed += 0.2
                 self.angle = (
                     (math.pi / 4)
@@ -104,7 +104,7 @@ class pongGame:
 
             if (self.yball > self.agent_2_position \
             and self.yball < self.agent_2_position + self.paddle_length \
-            and self.xball > self.width - 41 \
+            and self.xball >= self.width - 41 \
             and self.xball < self.width - 30):
                 self.totalSpeed += 0.2
                 self.angle = (
@@ -120,7 +120,7 @@ class pongGame:
             self.agent_2_position = min(self.height - 5 - self.paddle_length, self.agent_2_position + 5)
             if (self.yball > self.agent_2_position \
             and self.yball < self.agent_2_position + self.paddle_length \
-            and self.xball > self.width - 41 \
+            and self.xball >= self.width - 41 \
             and self.xball < self.width - 30):
                 self.totalSpeed += 0.2
                 self.angle = (
@@ -135,7 +135,7 @@ class pongGame:
         elif(action2 == 0):
             if(self.yball > self.agent_2_position \
             and self.yball < self.agent_2_position + self.paddle_length \
-            and self.xball > self.width - 41 \
+            and self.xball >= self.width - 41 \
             and self.xball < self.width - 30):
                 self.totalSpeed += 0.2
                 self.angle = (
