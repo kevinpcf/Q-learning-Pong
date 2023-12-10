@@ -7,8 +7,8 @@ class pongGame:
 
     def __init__(self):
         """ Inizializzazione dei parametri di gioco"""
-        self.width = 720
-        self.height = 576
+        self.width = 400
+        self.height = 400
         self.game_speed = 1
 
         pygame.init()
@@ -95,7 +95,7 @@ class pongGame:
                     * (self.yball - (self.agent_1_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
-                self.xball = 42
+                self.xball = 41
                 reward1 = 10
 
         # Movimento della racchetta dell'opponent

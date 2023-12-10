@@ -13,11 +13,12 @@ class Agent(ABC):
     def normalize_x(self, val):
         ret = 0
         value = int(val)
-        if(value < 41):
+        
+        if(value <= 41):
             ret = 0
-        elif(value > self.width - 41):
+        elif(value >= self.width - 41):
             ret = self.width - 81
-        elif(value <= self.width - 41):
+        else:
             ret = value - 41
         return ret
             
