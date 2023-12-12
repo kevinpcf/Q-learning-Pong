@@ -9,7 +9,7 @@ class pongGame:
         """ Inizializzazione dei parametri di gioco"""
         self.width = 400
         self.height = 400
-        self.game_speed = 3
+        self.game_speed = 1
 
         pygame.init()
         self.window = pygame.display.set_mode((self.width, self.height))
@@ -64,7 +64,6 @@ class pongGame:
             and self.yball < self.agent_1_position + self.paddle_length \
             and self.xball > 30 \
             and self.xball <= 41):
-                self.totalSpeed += 0.2
                 self.angle = (
                     (math.pi / 4)
                     * (self.yball - (self.agent_1_position + self.paddle_length / 2))
@@ -86,7 +85,6 @@ class pongGame:
             and self.yball < self.agent_1_position + self.paddle_length \
             and self.xball > 30 \
             and self.xball <= 41):
-                self.totalSpeed += 0.2
                 self.angle = (
                     (math.pi / 4)
                     * (self.yball - (self.agent_1_position + self.paddle_length / 2))
@@ -107,7 +105,6 @@ class pongGame:
             and self.yball < self.agent_1_position + self.paddle_length \
             and self.xball > 30 \
             and self.xball <= 41):
-                self.totalSpeed += 0.2
                 self.angle = (
                     (math.pi / 4)
                     * (self.yball - (self.agent_1_position + self.paddle_length / 2))
@@ -131,7 +128,6 @@ class pongGame:
             and self.yball < self.agent_2_position + self.paddle_length \
             and self.xball >= self.width - 41 \
             and self.xball < self.width - 30):
-                self.totalSpeed += 0.2
                 self.angle = (
                     math.pi
                     - (math.pi / 4)
@@ -154,7 +150,6 @@ class pongGame:
             and self.yball < self.agent_2_position + self.paddle_length \
             and self.xball >= self.width - 41 \
             and self.xball < self.width - 30):
-                self.totalSpeed += 0.2
                 self.angle = (
                     math.pi
                     - (math.pi / 4)
@@ -176,7 +171,6 @@ class pongGame:
             and self.yball < self.agent_2_position + self.paddle_length \
             and self.xball >= self.width - 41 \
             and self.xball < self.width - 30):
-                self.totalSpeed += 0.2
                 self.angle = (
                     math.pi
                     - (math.pi / 4)

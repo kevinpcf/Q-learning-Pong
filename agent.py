@@ -25,11 +25,11 @@ class Agent(ABC):
     def normalize_y(self, val):
         value = int(val) 
         if(value > self.height - 6):
-            return -5
-        elif(value < 65):
-            return -5
+            return self.height - 71
+        elif(value <= 65):
+            return 0
         else: 
-            return value - 65
+            return value - 66
     
     def normalize_opponent(self, val):
         value = int(val / 5)
