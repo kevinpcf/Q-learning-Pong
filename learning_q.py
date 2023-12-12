@@ -17,10 +17,10 @@ def progress_bar(progress: float):
     print(line)
 
 def main():
-    agent_1 = AgentQ(400, 400, 0.7, 0.3, 0.2)
-    agent_2 = AgentQ(400, 400, 0.7, 0.3, 0.2)
+    agent_1 = AgentQ(400, 400, 0.2, 0.6, 0.1)
+    agent_2 = AgentQ(400, 400, 0.1, 0.8, 0.2)
 
-    num_episodes = 20
+    num_episodes = 5000
 
     print("\nINZIO TRAINING")
     print("Progresso:\n")

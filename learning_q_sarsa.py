@@ -20,7 +20,7 @@ def main():
     agent_1 = AgentQ(720, 576, 0.7, 0.3, 0.2)
     agent_2 = AgentSarsa(720, 576, 0.7, 0.3)
 
-    num_episodes = 30000
+    num_episodes = 3000
 
     print("\nINZIO TRAINING")
     print("Progresso:\n")
