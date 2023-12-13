@@ -9,7 +9,7 @@ class pongGame:
         """ Inizializzazione dei parametri di gioco"""
         self.width = 400
         self.height = 400
-        self.game_speed = 1
+        self.game_speed = 0.5
 
         pygame.init()
         self.window = pygame.display.set_mode((self.width, self.height))
@@ -62,15 +62,15 @@ class pongGame:
 
             if (self.yball > self.agent_1_position \
             and self.yball < self.agent_1_position + self.paddle_length \
-            and self.xball > 30 \
-            and self.xball <= 41):
+            and self.xball > 31 \
+            and self.xball < 42):
                 self.angle = (
                     (math.pi / 4)
                     * (self.yball - (self.agent_1_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
-                self.xball = 41
-                reward1 = 1
+                self.xball = 42
+                reward1 = 5
             elif (self.yball > self.agent_1_position \
                 and self.yball < self.agent_1_position + self.paddle_length \
                 and self.xball > 41):
@@ -83,15 +83,15 @@ class pongGame:
             self.agent_1_position = min(self.height - 5 - self.paddle_length, self.agent_1_position + 5)
             if (self.yball > self.agent_1_position \
             and self.yball < self.agent_1_position + self.paddle_length \
-            and self.xball > 30 \
-            and self.xball <= 41):
+            and self.xball > 31 \
+            and self.xball < 42):
                 self.angle = (
                     (math.pi / 4)
                     * (self.yball - (self.agent_1_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
-                self.xball = 41
-                reward1 = 1
+                self.xball = 42
+                reward1 = 5
             elif (self.yball > self.agent_1_position \
                 and self.yball < self.agent_1_position + self.paddle_length \
                 and self.xball > 41):
@@ -103,15 +103,15 @@ class pongGame:
         elif(action1 == 0):
             if(self.yball > self.agent_1_position \
             and self.yball < self.agent_1_position + self.paddle_length \
-            and self.xball > 30 \
-            and self.xball <= 41):
+            and self.xball > 31 \
+            and self.xball < 42):
                 self.angle = (
                     (math.pi / 4)
                     * (self.yball - (self.agent_1_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
-                self.xball = 41
-                reward1 = 1
+                self.xball = 42
+                reward1 = 5
             elif (self.yball > self.agent_1_position \
                 and self.yball < self.agent_1_position + self.paddle_length \
                 and self.xball > 41):
@@ -126,19 +126,19 @@ class pongGame:
 
             if (self.yball > self.agent_2_position \
             and self.yball < self.agent_2_position + self.paddle_length \
-            and self.xball >= self.width - 41 \
-            and self.xball < self.width - 30):
+            and self.xball > self.width - 42 \
+            and self.xball < self.width - 31):
                 self.angle = (
                     math.pi
                     - (math.pi / 4)
                     * (self.yball - (self.agent_2_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
-                self.xball = self.width - 41
-                reward2 = 1
+                self.xball = self.width - 42
+                reward2 = 5
             elif (self.yball > self.agent_2_position \
                 and self.yball < self.agent_2_position + self.paddle_length \
-                and self.xball < self.width -41):
+                and self.xball < self.width - 41):
                     reward2 = 10
             else:
                 reward2 = -1
@@ -148,19 +148,19 @@ class pongGame:
             self.agent_2_position = min(self.height - 5 - self.paddle_length, self.agent_2_position + 5)
             if (self.yball > self.agent_2_position \
             and self.yball < self.agent_2_position + self.paddle_length \
-            and self.xball >= self.width - 41 \
-            and self.xball < self.width - 30):
+            and self.xball > self.width - 42 \
+            and self.xball < self.width - 31):
                 self.angle = (
                     math.pi
                     - (math.pi / 4)
                     * (self.yball - (self.agent_2_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
-                self.xball = self.width - 41
-                reward2 = 1
+                self.xball = self.width - 42
+                reward2 = 5
             elif (self.yball > self.agent_2_position \
                 and self.yball < self.agent_2_position + self.paddle_length \
-                and self.xball <= self.width -41):
+                and self.xball < self.width - 41):
                     reward2 = 10
             else:
                 reward2 = -1
@@ -169,29 +169,29 @@ class pongGame:
         elif(action2 == 0):
             if(self.yball > self.agent_2_position \
             and self.yball < self.agent_2_position + self.paddle_length \
-            and self.xball >= self.width - 41 \
-            and self.xball < self.width - 30):
+            and self.xball > self.width - 42 \
+            and self.xball < self.width - 31):
                 self.angle = (
                     math.pi
                     - (math.pi / 4)
                     * (self.yball - (self.agent_2_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
-                self.xball = self.width - 41
-                reward2 = 1
+                self.xball = self.width - 42
+                reward2 = 5
             elif (self.yball > self.agent_2_position \
                 and self.yball < self.agent_2_position + self.paddle_length \
-                and self.xball <= self.width -41):
+                and self.xball < self.width -41):
                     reward2 = 10
             else:
                 reward2 = -1
 
         # se la palla è troppo a sinistra la racchetta di destra ha vinto 
-        if(self.xball < 41):
+        if(self.xball < 20):
             reward1 = -8 
             reward2 = 8
         # se la palla è troppo a destra la racchetta di sinistra ha vinto 
-        elif(self.xball > self.width - 41):
+        elif(self.xball > self.width - 20):
             reward1 = 8
             reward2 = -8
 

@@ -13,13 +13,12 @@ class Agent(ABC):
     def normalize_x(self, val):
         ret = 0
         value = int(val)
-        
-        if(value <= 41):
+        if(value < 41):
             ret = 0
-        elif(value >= self.width - 41):
+        elif(value > self.width - 42):
             ret = self.width - 81
         else:
-            ret = value - 41
+            ret = value - 40
         return ret
             
     def normalize_y(self, val):
@@ -46,6 +45,11 @@ class AgentQ(Agent):
 
     def getQ(self):
         return self.Q
+    
+    def set_terminal_state_Q(self, terminal_left, terminal_right):
+        self.Q[:, 0, :, :] = terminal_left
+        self.Q[:, self.width -81, :, :] = terminal_right
+
 
 class AgentSarsa(Agent):
     def __init__(self, width, height, gamma, alpha):

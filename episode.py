@@ -7,15 +7,18 @@ import joblib
 def run_learning_episode_Q(agent_1: AgentQ, agent_2: AgentQ):
     """Metodo che esegue un episodio di una partita q-learning vs q-learning"""
     pong = pongGame()
-    function_Q_1 = agent_1.getQ()
-    function_Q_2 = agent_2.getQ()
 
     finish = False
 
+    reward1sum = 0
+    reward2sum = 0
+    i = 0
+
     while(not finish):
+        i +=1
         # prendo le posizioni della racchetta sinistra, della racchetta destra e le coordinate x e y della palla 
         agent_1_position, agent_2_position, xball, yball = pong.getState()
-        
+
         # associo le coordinate ai rispettivi stati
         agent_1_position = agent_1.normalize_opponent(agent_1_position)
         agent_2_position = agent_2.normalize_opponent(agent_2_position)
@@ -23,7 +26,7 @@ def run_learning_episode_Q(agent_1: AgentQ, agent_2: AgentQ):
         yball = agent_1.normalize_y(yball)
 
         # prendo i valori associati alle azioni nello stato corrente dell'agente 1
-        action_values1 = function_Q_1[agent_1_position, xball, yball]
+        action_values1 = agent_1.Q[agent_1_position, xball, yball]
         # scelgo un valore randomico
         random_greedy = random.random()
         # se il valore è maggiore di epsilon faccio exploitation
@@ -34,7 +37,7 @@ def run_learning_episode_Q(agent_1: AgentQ, agent_2: AgentQ):
             action1 = random.randint(0,2)
 
         # prendo i valori associati alle azioni nello stato corrente dell'agente 2
-        action_values2 = function_Q_2[agent_2_position, xball, yball]
+        action_values2 = agent_2.Q[agent_2_position, xball, yball]
         # scelgo un valore randomico
         random_greedy = random.random()
         # se il valore è maggiore di epsilon faccio exploitation
@@ -56,15 +59,24 @@ def run_learning_episode_Q(agent_1: AgentQ, agent_2: AgentQ):
         new_xball = agent_1.normalize_x(new_xball)
         new_yball = agent_1.normalize_y(new_yball)
 
-        # aggiorno la Q function dell'agente 1
-        function_Q_1[agent_1_position, xball, yball, action1] = function_Q_1[agent_1_position, xball, yball, action1] + \
-        agent_1.alpha * (reward1 + (agent_1.gamma * np.max(function_Q_1[new_agent_1_position, new_xball, new_yball, :], axis = -1)) - \
-            function_Q_1[agent_1_position, xball, yball, action1])
-    
-        # aggiorno la Q function dell'agente 2
-        function_Q_2[agent_2_position, xball, yball, action2] = function_Q_2[agent_2_position, xball, yball, action2] + \
-        agent_2.alpha * (reward2 + (agent_2.gamma * np.max(function_Q_2[new_agent_2_position, new_xball, new_yball, :], axis = -1)) - \
-            function_Q_2[agent_2_position, xball, yball, action2])
+        if((new_xball == xball + 1 or new_xball == xball -1) or (new_yball == yball + 1 or new_yball == yball -1)):
+            if(xball !=  0 and xball != pong.height - 81):
+                # aggiorno la Q function dell'agente 1
+                agent_1.Q[agent_1_position, xball, yball, action1] = agent_1.Q[agent_1_position, xball, yball, action1] + \
+                agent_1.alpha * (reward1 + (agent_1.gamma * np.max(agent_1.Q[new_agent_1_position, new_xball, new_yball, :], axis = -1)) - \
+                    agent_1.Q[agent_1_position, xball, yball, action1])
+                
+                # if(xball < 5):
+                #     print("xball", xball)
+                #     print("newxball", new_xball)
+            
+                # aggiorno la Q function dell'agente 2
+                agent_2.Q[agent_2_position, xball, yball, action2] = agent_2.Q[agent_2_position, xball, yball, action2] + \
+                agent_2.alpha * (reward2 + (agent_2.gamma * np.max(agent_2.Q[new_agent_2_position, new_xball, new_yball, :], axis = -1)) - \
+                    agent_2.Q[agent_2_position, xball, yball, action2])
+                
+        reward1sum = reward1sum + reward1
+        reward2sum = reward2sum + reward2
 
         # se l'episodio è finito assegno i punteggi
         if(reward1 == 8):
@@ -75,6 +87,8 @@ def run_learning_episode_Q(agent_1: AgentQ, agent_2: AgentQ):
             finish = True
 
         pong.draw(agent_1.score, agent_2.score)
+
+    return reward1sum / i, reward2sum / i 
 
 def run_learning_episode_sarsa(agent_1: AgentSarsa, agent_2: AgentSarsa):
     """Metodo che esegue un episodio di una partita sarsa vs sarsa"""
