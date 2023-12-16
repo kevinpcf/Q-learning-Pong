@@ -3,6 +3,8 @@ import joblib
 from pongGame import pongGame
 import sys, time
 
+window = 400
+
 def load(filename):
     """Funzione per caricare il modello salvato"""
     result = joblib.load(filename)
@@ -12,22 +14,22 @@ def load(filename):
 
 def normalize_x(val):
     """Funzione che mappa la coordinata x della palla nel corrispettivo stato"""
-    # 1 stato corrisponde a 4 pixel dello schermo
-    v = int(np.floor((val/400) * 100)) - 9
+    # 1 stato corrisponde a 8 pixel dello schermo
+    v = int(np.floor((val / window) * 50)) - 4
     if(v < 0):
         v = 0
-    if (v >= 82):
-        v = 82 - 1
+    if (v >= 42):
+        v = 42 - 1
     return v
         
 def normalize_y(val):
     """Funzione che mappa la coordinata y della palla o della racchetta nel corrispettivo stato"""
-    # 1 stato corrisponde a 4 pixel dello schermo
-    v = int(np.floor((val/400) * 100)) - 15
+    # 1 stato corrisponde a 8 pixel dello schermo
+    v = int(np.floor(((val + 4) / window) * 50)) - 8
     if(v < 0):
         v = 0
-    if v >= 80:
-        v = 80 - 1
+    if v >= 40:
+        v = 40 - 1
     return v
 
 def main():
@@ -40,13 +42,6 @@ def main():
         filename = "training_q_sarsa_agents.joblib"
 
     [agent_1, agent_2, agent_1_score, agent_2_score] = load(filename)
-
-    # for y in range(agent_1.shape[0]):
-    #     for x in range(agent_1.shape[1]):
-    #         for ball_y in range(agent_1.shape[2]):
-    #             for action in range(agent_1.shape[3]):
-    #                 if(agent_1[y, x, ball_y, action] > 0):
-    #                     print(f"Q({y}, {x}, {ball_y}, {action}): {agent_1[y, x, ball_y, action]}")
 
     print("Inizio del gioco")
     agent_1_score = 0

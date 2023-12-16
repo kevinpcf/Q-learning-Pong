@@ -16,24 +16,35 @@ def progress_bar(progress: float):
     print(line)
 
 def main():
-    agent_1 = AgentSarsa(720, 576, 0.7, 0.3)
-    agent_2 = AgentSarsa(720, 576, 0.7, 0.3)
+    window = 400
+    num_episodes = 5000
 
-    num_episodes = 30000
+    agent_1 = AgentSarsa(window, window, 0.6, 0.2)
+    agent_2 = AgentSarsa(window, window, 0.8, 0.1)
 
     print("\nINZIO TRAINING")
     print("Progresso:\n")
 
+    rewardsum1 = 0
+    rewardsum2 = 0
+
     # Eseguo gli episodi e salvo nel training
     for i in range(num_episodes):
     
-        run_learning_episode_sarsa(agent_1, agent_2)
-        # progress_bar(float(i)/num_episodes)
+        reward1sum, reward2sum = run_learning_episode_sarsa(agent_1, agent_2)
+        rewardsum1 = rewardsum1 + reward1sum
+        rewardsum2 = rewardsum2 + reward2sum
         
         if(i == num_episodes-1):
             save(agent_1, agent_2)
-
-    # progress_bar(1)
+        if (i + 1) % 100 == 0:
+            progress_bar(float(i)/num_episodes)
+            agent_1.epsilon = max(agent_1.epsilon - 0.1, 0.1)
+            print(agent_1.epsilon)
+            print(f"Iterazione {i + 1}:")
+            print("ricompensa 1 media", rewardsum1 / i)
+            print("ricompensa 2 media", rewardsum2 / i)
+    progress_bar(1)
 
 if __name__ == "__main__":
     main()

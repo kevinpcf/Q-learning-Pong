@@ -12,7 +12,7 @@ class Agent(ABC):
     
     def normalize_x(self, val):
         """Funzione che mappa la coordinata x della palla nel corrispettivo stato"""
-        # 1 stato corrisponde a 4 pixel dello schermo
+        # 1 stato corrisponde a 8 pixel dello schermo
         v = int(np.floor((val/self.width) * 50)) - 4
         if(v < 0):
             v = 0
@@ -22,7 +22,7 @@ class Agent(ABC):
             
     def normalize_y(self, val):
         """Funzione che mappa la coordinata y della palla o della racchetta nel corrispettivo stato"""
-        # 1 stato corrisponde a 4 pixel dello schermo
+        # 1 stato corrisponde a 8 pixel dello schermo
         v = int(np.floor(((val + 4) / self.height) * 50)) - 8
         if(v < 0):
             v = 0
