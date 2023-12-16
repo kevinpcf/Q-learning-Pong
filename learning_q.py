@@ -17,12 +17,13 @@ def progress_bar(progress: float):
     print(line)
 
 def main():
-    agent_1 = AgentQ(400, 400, 0.6, 0.2, 0.5)
-    # agent_1.set_terminal_state_Q(-8, 8)
-    agent_2 = AgentQ(400, 400, 0.8, 0.1, 0.2)
-    # agent_2.set_terminal_state_Q(8, -8)
+    window = 400
+    num_episodes = 1000
 
-    num_episodes = 2000
+    agent_1 = AgentQ(window, window, 0.6, 0.2, 0.5)
+    # agent_1.set_terminal_state_Q(-8, 8)
+    agent_2 = AgentQ(window, window, 0.8, 0.1, 0.2)
+    # agent_2.set_terminal_state_Q(8, -8)
 
     print("\nINZIO TRAINING")
     print("Progresso:\n")

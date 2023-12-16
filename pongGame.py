@@ -11,6 +11,7 @@ class pongGame:
         self.height = 400
         self.game_speed = 0.5
 
+        # Inizializzazione della finestra di gioco
         pygame.init()
         self.window = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption("Ping Pong")
@@ -187,11 +188,11 @@ class pongGame:
                 reward2 = -1
 
         # se la palla è troppo a sinistra la racchetta di destra ha vinto 
-        if(self.xball < 20):
+        if(self.xball < 36):
             reward1 = -8 
             reward2 = 8
         # se la palla è troppo a destra la racchetta di sinistra ha vinto 
-        elif(self.xball > self.width - 20):
+        elif(self.xball > self.width - 36):
             reward1 = 8
             reward2 = -8
 

@@ -11,19 +11,23 @@ def load(filename):
     return result['agent_1'], result['agent_2'], result['agent_1_score'], result['agent_2_score']
 
 def normalize_x(val):
-    v = int(np.floor((val/400)*20)) - 1
+    """Funzione che mappa la coordinata x della palla nel corrispettivo stato"""
+    # 1 stato corrisponde a 4 pixel dello schermo
+    v = int(np.floor((val/400) * 100)) - 9
     if(v < 0):
         v = 0
-    if v >= 18:
-        v = 18-1
+    if (v >= 82):
+        v = 82 - 1
     return v
         
 def normalize_y(val):
-    v = int(np.floor((val/400)*20)) - 3
+    """Funzione che mappa la coordinata y della palla o della racchetta nel corrispettivo stato"""
+    # 1 stato corrisponde a 4 pixel dello schermo
+    v = int(np.floor((val/400) * 100)) - 15
     if(v < 0):
         v = 0
-    if v >= 16:
-        v = 16-1
+    if v >= 80:
+        v = 80 - 1
     return v
 
 def main():
