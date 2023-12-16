@@ -84,7 +84,7 @@ def run_learning_episode_Q(agent_1: AgentQ, agent_2: AgentQ):
             agent_2.score = agent_2.score + 1
             finish = True
 
-        # pong.draw(agent_1.score, agent_2.score)
+        pong.draw(agent_1.score, agent_2.score)
 
     return reward1sum / i, reward2sum / i 
 

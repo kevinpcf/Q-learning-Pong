@@ -56,11 +56,11 @@ class pongGame:
         reward1 = 0
         reward2 = 0
         
-        # movimento della racchetta sinistra
-        # se la racchetta deve salire di 5 punti
+        # movimento della racchetta sinistra verso l'alto
         if (action1 == 1 and self.agent_1_position > 65) :
             self.agent_1_position = self.agent_1_position - 5
-
+            
+            # se colpisce la palla assegno la reward
             if (self.yball > self.agent_1_position \
             and self.yball < self.agent_1_position + self.paddle_length \
             and self.xball > 30 \
@@ -72,6 +72,7 @@ class pongGame:
                 )
                 self.xball = 40
                 reward1 = 5
+            # se segue la palla assegno la reward
             elif (self.yball > self.agent_1_position \
                 and self.yball < self.agent_1_position + self.paddle_length \
                 and self.xball > 40):
@@ -79,9 +80,11 @@ class pongGame:
             else:
                 reward1 = -1
 
-        # se la racchetta deve scendere di 5 punti
+        # movimento della racchetta sinistra verso il basso
         elif (action1 == 2 and self.agent_1_position < self.height - 25 - self.paddle_length) :
             self.agent_1_position = self.agent_1_position + 5
+            
+            # se colpisce la palla assegno la reward
             if (self.yball > self.agent_1_position \
             and self.yball < self.agent_1_position + self.paddle_length \
             and self.xball > 30 \
@@ -93,6 +96,8 @@ class pongGame:
                 )
                 self.xball = 40
                 reward1 = 5
+
+            # se segue la palla assegno la reward
             elif (self.yball > self.agent_1_position \
                 and self.yball < self.agent_1_position + self.paddle_length \
                 and self.xball > 40):
@@ -100,8 +105,9 @@ class pongGame:
             else:
                 reward1 = -1
 
-        # se la racchetta deve restare ferma
+        # racchetta sinistra ferma
         elif(action1 == 0):
+            # se colpisce la palla assegno la reward
             if(self.yball > self.agent_1_position \
             and self.yball < self.agent_1_position + self.paddle_length \
             and self.xball > 30 \
@@ -113,6 +119,7 @@ class pongGame:
                 )
                 self.xball = 40
                 reward1 = 5
+            # se segue la palla assegno la reward
             elif (self.yball > self.agent_1_position \
                 and self.yball < self.agent_1_position + self.paddle_length \
                 and self.xball > 40):
@@ -120,11 +127,11 @@ class pongGame:
             else:
                 reward1 = -1
 
-        # Movimento della racchetta destra
-        # se la racchetta deve scendere di 5 punti
+        # movimento verso il basso della racchetta destra
         if (action2 == 1 and self.agent_2_position > 65) :
             self.agent_2_position = self.agent_2_position - 5
 
+            # se colpisce la palla assegna la reward
             if (self.yball > self.agent_2_position \
             and self.yball < self.agent_2_position + self.paddle_length \
             and self.xball > self.width - 40 \
@@ -137,6 +144,8 @@ class pongGame:
                 )
                 self.xball = self.width - 40
                 reward2 = 5
+
+            # se segue la palla assegna la reward
             elif (self.yball > self.agent_2_position \
                 and self.yball < self.agent_2_position + self.paddle_length \
                 and self.xball < self.width - 40):
@@ -144,9 +153,11 @@ class pongGame:
             else:
                 reward2 = -1
 
-        # se la racchetta deve salire di 5 punti
+        # movimento della racchetta destra verso l'alto
         elif (action2 == 2 and self.agent_2_position < self.height - 25 - self.paddle_length) :
             self.agent_2_position = self.agent_2_position + 5
+            
+            # se colpisce la palla assegna la reward
             if (self.yball > self.agent_2_position \
             and self.yball < self.agent_2_position + self.paddle_length \
             and self.xball > self.width - 40 \
@@ -159,6 +170,8 @@ class pongGame:
                 )
                 self.xball = self.width - 40
                 reward2 = 5
+
+            # se segue la palla assegna la reward
             elif (self.yball > self.agent_2_position \
                 and self.yball < self.agent_2_position + self.paddle_length \
                 and self.xball < self.width - 40):
@@ -166,8 +179,10 @@ class pongGame:
             else:
                 reward2 = -1
 
-        # se la racchetta deve restare ferma
+        # racchetta destra resta ferma
         elif(action2 == 0):
+            
+            # se tocca la palla assegna la reward
             if(self.yball > self.agent_2_position \
             and self.yball < self.agent_2_position + self.paddle_length \
             and self.xball > self.width - 40 \
@@ -180,6 +195,8 @@ class pongGame:
                 )
                 self.xball = self.width - 40
                 reward2 = 5
+
+            # se segue la palla assegna la reward
             elif (self.yball > self.agent_2_position \
                 and self.yball < self.agent_2_position + self.paddle_length \
                 and self.xball < self.width - 40):
@@ -209,7 +226,7 @@ class pongGame:
         
 
     def draw(self, player_score, opponent_score):
-        """Disegno del gioco"""
+        """Funzione che disegna la partita"""
         self.window.fill((141,70,16))
 
         # punteggio racchetta sinistra
