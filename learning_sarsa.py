@@ -17,7 +17,7 @@ def progress_bar(progress: float):
 
 def main():
     window = 400
-    num_episodes = 5000
+    num_episodes = 10000
 
     agent_1 = AgentSarsa(window, window, 0.6, 0.2)
     agent_2 = AgentSarsa(window, window, 0.8, 0.1)

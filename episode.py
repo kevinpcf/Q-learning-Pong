@@ -175,6 +175,8 @@ def run_learning_episode_q_sarsa(agent_1: AgentQ, agent_2: AgentSarsa):
     finish = False
 
     while(not finish):
+        i += 1
+
         # prendo i valori associati alle azioni nello stato corrente dell'agente 1
         action_values1 = agent_1.Q[agent_1_position, xball, yball]
         # scelgo un valore randomico
@@ -204,15 +206,16 @@ def run_learning_episode_q_sarsa(agent_1: AgentQ, agent_2: AgentSarsa):
         new_xball = agent_1.normalize_x(new_xball)
         new_yball = agent_1.normalize_y(new_yball)
 
-        # aggiorno la Q function dell'agente 1
-        agent_1.Q[agent_1_position, xball, yball, action1] = agent_1.Q[agent_1_position, xball, yball, action1] + \
-            agent_1.alpha * (reward1 + (agent_1.gamma * np.max(agent_1.Q[new_agent_1_position, new_xball, new_yball, :], axis = -1)) - \
-                agent_1.Q[agent_1_position, xball, yball, action1])
+        if((new_xball == xball + 1 or new_xball == xball -1) or (new_yball == yball + 1 or new_yball == yball -1)):
+            # aggiorno la Q function dell'agente 1
+            agent_1.Q[agent_1_position, xball, yball, action1] = agent_1.Q[agent_1_position, xball, yball, action1] + \
+                agent_1.alpha * (reward1 + (agent_1.gamma * np.max(agent_1.Q[new_agent_1_position, new_xball, new_yball, :], axis = -1)) - \
+                    agent_1.Q[agent_1_position, xball, yball, action1])
 
-        # aggiorno la funzione sarsa dell'agente 2
-        agent_2.sarsa[agent_2_position, xball, yball, action2] = agent_2.sarsa[agent_2_position, xball, yball, action2] + \
-            agent_2.alpha * (reward2 + (agent_2.gamma * agent_2.sarsa[new_agent_2_position, new_xball, new_yball, action2]) - \
-                agent_2.sarsa[agent_2_position, xball, yball, action2])
+            # aggiorno la funzione sarsa dell'agente 2
+            agent_2.sarsa[agent_2_position, xball, yball, action2] = agent_2.sarsa[agent_2_position, xball, yball, action2] + \
+                agent_2.alpha * (reward2 + (agent_2.gamma * agent_2.sarsa[new_agent_2_position, new_xball, new_yball, action2]) - \
+                    agent_2.sarsa[agent_2_position, xball, yball, action2])
 
         reward1sum = reward1sum + reward1
         reward2sum = reward2sum + reward2
@@ -231,7 +234,8 @@ def run_learning_episode_q_sarsa(agent_1: AgentQ, agent_2: AgentSarsa):
             agent_2.score = agent_2.score + 1
             finish = True
 
-        pong.draw(agent_1.score, agent_2.score)
+        #pong.draw(agent_1.score, agent_2.score)
+        
     return reward1sum / i, reward2sum / i
 
 def save(agent_1: Agent, agent_2: Agent):

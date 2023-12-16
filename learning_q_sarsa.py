@@ -18,7 +18,7 @@ def progress_bar(progress: float):
 
 def main():
     window = 400
-    num_episodes = 5000
+    num_episodes = 10000
 
     agent_1 = AgentQ(window, window, 0.6, 0.2, 0.5)
     agent_2 = AgentSarsa(window, window, 0.8, 0.1)
@@ -32,7 +32,7 @@ def main():
     # Eseguo gli episodi e salvo nel training
     for i in range(num_episodes):
     
-        reward1sum, reward2sum = run_learning_episode_Q(agent_1, agent_2)
+        reward1sum, reward2sum = run_learning_episode_q_sarsa(agent_1, agent_2)
         rewardsum1 = rewardsum1 + reward1sum
         rewardsum2 = rewardsum2 + reward2sum
         
