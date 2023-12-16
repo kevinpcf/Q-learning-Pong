@@ -10,29 +10,21 @@ def load(filename):
     # Recupera la matrice Q
     return result['agent_1'], result['agent_2'], result['agent_1_score'], result['agent_2_score']
 
-def normalize_x(val, width):
-    ret = 0
-    value = int(val)
-    if(value < 41):
-        ret = 0
-    elif(value > width - 41):
-        ret = width - 81
-    elif(value <= width - 41):
-        ret = value - 41
-    return ret
+def normalize_x(val):
+    v = int(np.floor((val/400)*20)) - 1
+    if(v < 0):
+        v = 0
+    if v >= 18:
+        v = 18-1
+    return v
         
-def normalize_y(val, height):
-    value = int(val) 
-    if(value > height - 6):
-        return -5
-    elif(value < 65):
-        return -5
-    else: 
-        return value - 65
-
-def normalize_opponent( val):
-    value = int(val / 5)
-    return value - 13
+def normalize_y(val):
+    v = int(np.floor((val/400)*20)) - 3
+    if(v < 0):
+        v = 0
+    if v >= 16:
+        v = 16-1
+    return v
 
 def main():
     args = sys.argv[1:]
@@ -63,10 +55,10 @@ def main():
         while not finish:
             agent_1_position, agent_2_position, xball, yball = pong.getState()
             
-            agent_1_position = normalize_opponent(agent_1_position)
-            agent_2_position = normalize_opponent(agent_2_position)
-            xball = normalize_x(xball, pong.getWidth())
-            yball = normalize_y(yball, pong.getHeight())
+            agent_1_position = normalize_y(agent_1_position)
+            agent_2_position = normalize_y(agent_2_position)
+            xball = normalize_x(xball)
+            yball = normalize_y(yball)
 
             action_values_1 = agent_1[agent_1_position, xball, yball]
             action_values_2 = agent_2[agent_2_position, xball, yball]

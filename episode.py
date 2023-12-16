@@ -7,24 +7,22 @@ import joblib
 def run_learning_episode_Q(agent_1: AgentQ, agent_2: AgentQ):
     """Metodo che esegue un episodio di una partita q-learning vs q-learning"""
     pong = pongGame()
-
     finish = False
-
     reward1sum = 0
     reward2sum = 0
     i = 0
 
+    # prendo le posizioni della racchetta sinistra, della racchetta destra e le coordinate x e y della palla 
+    agent_1_position, agent_2_position, xball, yball = pong.getState()
+
+    # associo le coordinate ai rispettivi stati
+    agent_1_position = agent_1.normalize_y(agent_1_position)
+    agent_2_position = agent_2.normalize_y(agent_2_position)
+    xball = agent_1.normalize_x(xball)
+    yball = agent_1.normalize_y(yball)
+
     while(not finish):
         i +=1
-        # prendo le posizioni della racchetta sinistra, della racchetta destra e le coordinate x e y della palla 
-        agent_1_position, agent_2_position, xball, yball = pong.getState()
-
-        # associo le coordinate ai rispettivi stati
-        agent_1_position = agent_1.normalize_opponent(agent_1_position)
-        agent_2_position = agent_2.normalize_opponent(agent_2_position)
-        xball = agent_1.normalize_x(xball)
-        yball = agent_1.normalize_y(yball)
-
         # prendo i valori associati alle azioni nello stato corrente dell'agente 1
         action_values1 = agent_1.Q[agent_1_position, xball, yball]
         # scelgo un valore randomico
@@ -54,29 +52,29 @@ def run_learning_episode_Q(agent_1: AgentQ, agent_2: AgentQ):
         new_agent_1_position, new_agent_2_position, new_xball, new_yball = pong.getState()
 
         # associo le coordinate ai rispettivi stati
-        new_agent_1_position = agent_1.normalize_opponent(new_agent_1_position)
-        new_agent_2_position = agent_2.normalize_opponent(new_agent_2_position)
+        new_agent_1_position = agent_1.normalize_y(new_agent_1_position)
+        new_agent_2_position = agent_2.normalize_y(new_agent_2_position)
         new_xball = agent_1.normalize_x(new_xball)
         new_yball = agent_1.normalize_y(new_yball)
 
         if((new_xball == xball + 1 or new_xball == xball -1) or (new_yball == yball + 1 or new_yball == yball -1)):
-            if(xball !=  0 and xball != pong.height - 81):
-                # aggiorno la Q function dell'agente 1
-                agent_1.Q[agent_1_position, xball, yball, action1] = agent_1.Q[agent_1_position, xball, yball, action1] + \
-                agent_1.alpha * (reward1 + (agent_1.gamma * np.max(agent_1.Q[new_agent_1_position, new_xball, new_yball, :], axis = -1)) - \
-                    agent_1.Q[agent_1_position, xball, yball, action1])
-                
-                # if(xball < 5):
-                #     print("xball", xball)
-                #     print("newxball", new_xball)
-            
-                # aggiorno la Q function dell'agente 2
-                agent_2.Q[agent_2_position, xball, yball, action2] = agent_2.Q[agent_2_position, xball, yball, action2] + \
-                agent_2.alpha * (reward2 + (agent_2.gamma * np.max(agent_2.Q[new_agent_2_position, new_xball, new_yball, :], axis = -1)) - \
-                    agent_2.Q[agent_2_position, xball, yball, action2])
+            # aggiorno la Q function dell'agente 1
+            agent_1.Q[agent_1_position, xball, yball, action1] = agent_1.Q[agent_1_position, xball, yball, action1] + \
+            agent_1.alpha * (reward1 + (agent_1.gamma * np.max(agent_1.Q[new_agent_1_position, new_xball, new_yball, :], axis = -1)) - \
+                agent_1.Q[agent_1_position, xball, yball, action1])
+        
+            # aggiorno la Q function dell'agente 2
+            agent_2.Q[agent_2_position, xball, yball, action2] = agent_2.Q[agent_2_position, xball, yball, action2] + \
+            agent_2.alpha * (reward2 + (agent_2.gamma * np.max(agent_2.Q[new_agent_2_position, new_xball, new_yball, :], axis = -1)) - \
+                agent_2.Q[agent_2_position, xball, yball, action2])
                 
         reward1sum = reward1sum + reward1
         reward2sum = reward2sum + reward2
+
+        agent_1_position = new_agent_1_position
+        agent_2_position = new_agent_2_position
+        xball = new_xball
+        yball = new_yball
 
         # se l'episodio è finito assegno i punteggi
         if(reward1 == 8):
@@ -86,15 +84,15 @@ def run_learning_episode_Q(agent_1: AgentQ, agent_2: AgentQ):
             agent_2.score = agent_2.score + 1
             finish = True
 
-        pong.draw(agent_1.score, agent_2.score)
+        # pong.draw(agent_1.score, agent_2.score)
 
     return reward1sum / i, reward2sum / i 
 
 def run_learning_episode_sarsa(agent_1: AgentSarsa, agent_2: AgentSarsa):
     """Metodo che esegue un episodio di una partita sarsa vs sarsa"""
     pong = pongGame()
-    function_sarsa_1 = agent_1.getSarsa()
-    function_sarsa_2 = agent_2.getSarsa()
+    function_sarsa_1 = agent_1.sarsa
+    function_sarsa_2 = agent_2.sarsa
 
     finish = False
 
@@ -103,8 +101,8 @@ def run_learning_episode_sarsa(agent_1: AgentSarsa, agent_2: AgentSarsa):
         agent_1_position, agent_2_position, xball, yball = pong.getState()
 
         # associo le coordinate ai rispettivi stati
-        agent_1_position = agent_1.normalize_opponent(agent_1_position)
-        agent_2_position = agent_2.normalize_opponent(agent_2_position)
+        agent_1_position = agent_1.normalize_y(agent_1_position)
+        agent_2_position = agent_2.normalize_y(agent_2_position)
         xball = agent_1.normalize_x(xball)
         yball = agent_1.normalize_y(yball)
         
@@ -127,8 +125,8 @@ def run_learning_episode_sarsa(agent_1: AgentSarsa, agent_2: AgentSarsa):
         new_agent_1_position, new_agent_2_position, new_xball, new_yball = pong.getState()
 
         # associo le coordinate ai rispettivi stati
-        new_agent_1_position = agent_1.normalize_opponent(new_agent_1_position)
-        new_agent_2_position = agent_2.normalize_opponent(new_agent_2_position)
+        new_agent_1_position = agent_1.normalize_y(new_agent_1_position)
+        new_agent_2_position = agent_2.normalize_y(new_agent_2_position)
         new_xball = agent_1.normalize_x(new_xball)
         new_yball = agent_1.normalize_y(new_yball)
 
@@ -155,8 +153,8 @@ def run_learning_episode_sarsa(agent_1: AgentSarsa, agent_2: AgentSarsa):
 def run_learning_episode_q_sarsa(agent_1: AgentQ, agent_2: AgentSarsa):
     """Metodo che esegue un episodio di una partita q_learning vs sarsa"""
     pong = pongGame()
-    function_Q_1 = agent_1.getQ()
-    function_sarsa_2 = agent_2.getSarsa()
+    function_Q_1 = agent_1.Q
+    function_sarsa_2 = agent_2.sarsa
 
     finish = False
 
@@ -165,8 +163,8 @@ def run_learning_episode_q_sarsa(agent_1: AgentQ, agent_2: AgentSarsa):
         agent_1_position, agent_2_position, xball, yball = pong.getState()
 
         # associo le coordinate ai rispettivi stati
-        agent_1_position = agent_1.normalize_opponent(agent_1_position)
-        agent_2_position = agent_2.normalize_opponent(agent_2_position)
+        agent_1_position = agent_1.normalize_y(agent_1_position)
+        agent_2_position = agent_2.normalize_y(agent_2_position)
         xball = agent_1.normalize_x(xball)
         yball = agent_1.normalize_y(yball)
 
@@ -194,8 +192,8 @@ def run_learning_episode_q_sarsa(agent_1: AgentQ, agent_2: AgentSarsa):
         new_agent_1_position, new_agent_2_position, new_xball, new_yball = pong.getState()
 
         # associo le coordinate ai rispettivi stati
-        new_agent_1_position = agent_1.normalize_opponent(new_agent_1_position)
-        new_agent_2_position = agent_2.normalize_opponent(new_agent_2_position)
+        new_agent_1_position = agent_1.normalize_y(new_agent_1_position)
+        new_agent_2_position = agent_2.normalize_y(new_agent_2_position)
         new_xball = agent_1.normalize_x(new_xball)
         new_yball = agent_1.normalize_y(new_yball)
 
@@ -222,14 +220,14 @@ def run_learning_episode_q_sarsa(agent_1: AgentQ, agent_2: AgentSarsa):
 def save(agent_1: Agent, agent_2: Agent):
     """ Funzione per salvare il modello """
     if(isinstance(agent_1, AgentQ)):
-        function_1 = agent_1.getQ()
-    else:
-        function_1 = agent_1.getSarsa()
+        function_1 = agent_1.Q
+    elif(isinstance(agent_1, AgentSarsa)):
+        function_1 = agent_1.sarsa
 
     if(isinstance(agent_2, AgentQ)):
-        function_2 = agent_2.getQ()
-    else:
-        function_2 = agent_2.getSarsa()
+        function_2 = agent_2.Q
+    elif(isinstance(agent_2, AgentSarsa)):
+        function_2 = agent_2.sarsa
 
     result = {'agent_1': function_1, 'agent_2': function_2, 'agent_1_score': agent_1.score, 'agent_2_score': agent_2.score}
     # Salva come file joblib con compressione
@@ -239,6 +237,5 @@ def save(agent_1: Agent, agent_2: Agent):
         filename = "training_sarsa_agents.joblib"
     else:
         filename = "training_q_sarsa_agents.joblib"
-
     joblib.dump(result, filename, compress=('zlib', 3))
     print("File salvato correttamente")

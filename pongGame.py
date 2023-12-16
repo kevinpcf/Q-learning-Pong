@@ -56,45 +56,45 @@ class pongGame:
         reward2 = 0
         
         # movimento della racchetta sinistra
-        # se la racchetta deve scendere di 5 punti
-        if (action1 == 1 and self.agent_1_position >= 65) :
-            self.agent_1_position = max(65, self.agent_1_position - 5)
+        # se la racchetta deve salire di 5 punti
+        if (action1 == 1 and self.agent_1_position > 65) :
+            self.agent_1_position = self.agent_1_position - 5
 
             if (self.yball > self.agent_1_position \
             and self.yball < self.agent_1_position + self.paddle_length \
-            and self.xball > 31 \
-            and self.xball < 42):
+            and self.xball > 30 \
+            and self.xball < 40):
                 self.angle = (
                     (math.pi / 4)
                     * (self.yball - (self.agent_1_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
-                self.xball = 42
+                self.xball = 40
                 reward1 = 5
             elif (self.yball > self.agent_1_position \
                 and self.yball < self.agent_1_position + self.paddle_length \
-                and self.xball > 41):
+                and self.xball > 40):
                     reward1 = 10
             else:
                 reward1 = -1
 
-        # se la racchetta deve salire di 5 punti
-        elif (action1 == 2 and self.agent_1_position < self.height - 5 - self.paddle_length) :
-            self.agent_1_position = min(self.height - 5 - self.paddle_length, self.agent_1_position + 5)
+        # se la racchetta deve scendere di 5 punti
+        elif (action1 == 2 and self.agent_1_position < self.height - 25 - self.paddle_length) :
+            self.agent_1_position = self.agent_1_position + 5
             if (self.yball > self.agent_1_position \
             and self.yball < self.agent_1_position + self.paddle_length \
-            and self.xball > 31 \
-            and self.xball < 42):
+            and self.xball > 30 \
+            and self.xball < 40):
                 self.angle = (
                     (math.pi / 4)
                     * (self.yball - (self.agent_1_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
-                self.xball = 42
+                self.xball = 40
                 reward1 = 5
             elif (self.yball > self.agent_1_position \
                 and self.yball < self.agent_1_position + self.paddle_length \
-                and self.xball > 41):
+                and self.xball > 40):
                     reward1 = 10
             else:
                 reward1 = -1
@@ -103,64 +103,64 @@ class pongGame:
         elif(action1 == 0):
             if(self.yball > self.agent_1_position \
             and self.yball < self.agent_1_position + self.paddle_length \
-            and self.xball > 31 \
-            and self.xball < 42):
+            and self.xball > 30 \
+            and self.xball < 40):
                 self.angle = (
                     (math.pi / 4)
                     * (self.yball - (self.agent_1_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
-                self.xball = 42
+                self.xball = 40
                 reward1 = 5
             elif (self.yball > self.agent_1_position \
                 and self.yball < self.agent_1_position + self.paddle_length \
-                and self.xball > 41):
+                and self.xball > 40):
                     reward1 = 10
             else:
                 reward1 = -1
 
         # Movimento della racchetta destra
         # se la racchetta deve scendere di 5 punti
-        if (action2 == 1 and self.agent_2_position >= 65) :
-            self.agent_2_position = max(65, self.agent_2_position - 5)
+        if (action2 == 1 and self.agent_2_position > 65) :
+            self.agent_2_position = self.agent_2_position - 5
 
             if (self.yball > self.agent_2_position \
             and self.yball < self.agent_2_position + self.paddle_length \
-            and self.xball > self.width - 42 \
-            and self.xball < self.width - 31):
+            and self.xball > self.width - 40 \
+            and self.xball < self.width - 30):
                 self.angle = (
                     math.pi
                     - (math.pi / 4)
                     * (self.yball - (self.agent_2_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
-                self.xball = self.width - 42
+                self.xball = self.width - 40
                 reward2 = 5
             elif (self.yball > self.agent_2_position \
                 and self.yball < self.agent_2_position + self.paddle_length \
-                and self.xball < self.width - 41):
+                and self.xball < self.width - 40):
                     reward2 = 10
             else:
                 reward2 = -1
 
         # se la racchetta deve salire di 5 punti
-        elif (action2 == 2 and self.agent_2_position < self.height - 5 - self.paddle_length) :
-            self.agent_2_position = min(self.height - 5 - self.paddle_length, self.agent_2_position + 5)
+        elif (action2 == 2 and self.agent_2_position < self.height - 25 - self.paddle_length) :
+            self.agent_2_position = self.agent_2_position + 5
             if (self.yball > self.agent_2_position \
             and self.yball < self.agent_2_position + self.paddle_length \
-            and self.xball > self.width - 42 \
-            and self.xball < self.width - 31):
+            and self.xball > self.width - 40 \
+            and self.xball < self.width - 30):
                 self.angle = (
                     math.pi
                     - (math.pi / 4)
                     * (self.yball - (self.agent_2_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
-                self.xball = self.width - 42
+                self.xball = self.width - 40
                 reward2 = 5
             elif (self.yball > self.agent_2_position \
                 and self.yball < self.agent_2_position + self.paddle_length \
-                and self.xball < self.width - 41):
+                and self.xball < self.width - 40):
                     reward2 = 10
             else:
                 reward2 = -1
@@ -169,19 +169,19 @@ class pongGame:
         elif(action2 == 0):
             if(self.yball > self.agent_2_position \
             and self.yball < self.agent_2_position + self.paddle_length \
-            and self.xball > self.width - 42 \
-            and self.xball < self.width - 31):
+            and self.xball > self.width - 40 \
+            and self.xball < self.width - 30):
                 self.angle = (
                     math.pi
                     - (math.pi / 4)
                     * (self.yball - (self.agent_2_position + self.paddle_length / 2))
                     / (self.paddle_length / 2)
                 )
-                self.xball = self.width - 42
+                self.xball = self.width - 40
                 reward2 = 5
             elif (self.yball > self.agent_2_position \
                 and self.yball < self.agent_2_position + self.paddle_length \
-                and self.xball < self.width -41):
+                and self.xball < self.width - 40):
                     reward2 = 10
             else:
                 reward2 = -1
@@ -196,7 +196,7 @@ class pongGame:
             reward2 = -8
 
         # se la palla colpisce il bordo inferiore o superiore del gioco cambio la sua angolazione
-        if(self.yball <= 65 or self.yball >= self.height - 5):
+        if(self.yball <= 60 or self.yball >= self.height - 20):
             self.angle = -self.angle
 
         self.ballHDirection = self.totalSpeed*math.cos(self.angle)
@@ -222,17 +222,17 @@ class pongGame:
         self.window.blit(text_surface, (self.width/2 + 100, 16))
 
         # disegno linea separazione per punteggio
-        pygame.draw.line(self.window, (255, 255, 255), (0, 60), (self.width, 60), 5)
-        pygame.draw.line(self.window, (255, 255, 255), (0, self.height-5), (self.width, self.height-5), 5)
+        pygame.draw.line(self.window, (255, 255, 255), (0, 55), (self.width, 55), 5)
+        pygame.draw.line(self.window, (255, 255, 255), (0, self.height-20), (self.width, self.height-20), 5)
 
         # disegno la palla
         pygame.draw.circle(self.window, (255, 255, 255),
                             (self.xball, self.yball), 5)
         # disegno racchetta sinistra
         pygame.draw.rect(self.window, (255, 51, 51),
-                            (31, self.agent_1_position, 10, self.paddle_length))
+                            (30, self.agent_1_position, 10, self.paddle_length))
         # disegno racchetta destra
         pygame.draw.rect(self.window, (0, 204, 0),
-                            (self.width-41, self.agent_2_position, 10, self.paddle_length))
+                            (self.width-40, self.agent_2_position, 10, self.paddle_length))
         # aggiorna il display
         pygame.display.flip()
