@@ -3,7 +3,8 @@ import joblib
 from pongGame import pongGame
 import sys, time
 
-window = 400
+window_width = 400
+window_height = 400
 
 def load(filename):
     """Funzione per caricare il modello salvato"""
@@ -15,7 +16,7 @@ def load(filename):
 def normalize_x(val):
     """Funzione che mappa la coordinata x della palla nel corrispettivo stato"""
     # 1 stato corrisponde a 8 pixel dello schermo
-    v = int(np.floor((val / window) * 50)) - 4
+    v = int(np.floor((val / window_width) * 50)) - 4
     if(v < 0):
         v = 0
     if (v >= 42):
@@ -25,7 +26,7 @@ def normalize_x(val):
 def normalize_y(val):
     """Funzione che mappa la coordinata y della palla o della racchetta nel corrispettivo stato"""
     # 1 stato corrisponde a 8 pixel dello schermo
-    v = int(np.floor(((val + 4) / window) * 50)) - 8
+    v = int(np.floor(((val + 4) / window_height) * 50)) - 8
     if(v < 0):
         v = 0
     if v >= 40:
@@ -42,6 +43,10 @@ def main():
         filename = "training_q_sarsa_agents.joblib"
 
     [agent_1, agent_2, agent_1_score, agent_2_score] = load(filename)
+
+    print("Modello caricato correttamente\n")
+    print("Score racchetta sinistra del modello: ", agent_1_score)
+    print("Score racchetta destra del modello: ", agent_2_score)
 
     print("Inizio del gioco")
     agent_1_score = 0

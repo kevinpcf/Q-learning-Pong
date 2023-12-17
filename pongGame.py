@@ -37,14 +37,6 @@ class pongGame:
         # lunghezza della racchetta
         self.paddle_length = self.height/6
 
-    def getWidth(self): 
-        """Ritorna la lunghezza dello schermo"""
-        return self.width
-
-    def getHeight(self): 
-        """Ritorna l'altezza dello schermo"""
-        return self.height
-
     def getState(self):
         """Ritorna i valori degli stati (posizione della racchetta sinistra,
         posizione della racchetta destra, posizione x della palla e posizione y della palla)"""

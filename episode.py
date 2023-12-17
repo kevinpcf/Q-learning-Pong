@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import time
 from pongGame import pongGame
 from agent import Agent, AgentQ, AgentSarsa
 import joblib
@@ -11,6 +12,17 @@ def run_learning_episode_Q(agent_1: AgentQ, agent_2: AgentQ):
     reward1sum = 0
     reward2sum = 0
     i = 0
+
+    # prendo le posizioni della racchetta sinistra, della racchetta destra e le coordinate x e y della palla 
+    agent_1_position, agent_2_position, xball, yball = pong.getState()
+
+    # associo le coordinate ai rispettivi stati
+    agent_1_position = agent_1.normalize_y(agent_1_position)
+    agent_2_position = agent_2.normalize_y(agent_2_position)
+    xball = agent_1.normalize_x(xball)
+    yball = agent_1.normalize_y(yball)
+
+    start_time = time.time()
 
     while(not finish):
         i += 1
@@ -76,15 +88,17 @@ def run_learning_episode_Q(agent_1: AgentQ, agent_2: AgentQ):
             agent_2.score = agent_2.score + 1
             finish = True
 
-        pong.draw(agent_1.score, agent_2.score)
-
-    return reward1sum / i, reward2sum / i 
+        # pong.draw(agent_1.score, agent_2.score)     # COMMENTARE QUESTA LINEA DI CODICE SE SI DESIDERA FARE L'ADDESTRAMENTO SENZA INTERFACCIA GRAFICA
+         
+        duration_episode = time.time() - start_time
+    return reward1sum / i, reward2sum / i , duration_episode
 
 def run_learning_episode_sarsa(agent_1: AgentSarsa, agent_2: AgentSarsa):
     """Metodo che esegue un episodio di una partita sarsa vs sarsa"""
     pong = pongGame()
     reward1sum = 0
     reward2sum = 0
+    start_time = time.time()
     i = 0
 
     # prendo le posizioni della racchetta sinistra, della racchetta destra e le coordinate x e y della palla
@@ -97,7 +111,7 @@ def run_learning_episode_sarsa(agent_1: AgentSarsa, agent_2: AgentSarsa):
     yball = agent_1.normalize_y(yball)
 
     finish = False
-
+    
     while(not finish):
         i += 1
         # prendo i valori associati alle azioni nello stato corrente dell'agente 1
@@ -152,15 +166,17 @@ def run_learning_episode_sarsa(agent_1: AgentSarsa, agent_2: AgentSarsa):
             agent_2.score = agent_2.score + 1
             finish = True
 
-        pong.draw(agent_1.score, agent_2.score)
+        # pong.draw(agent_1.score, agent_2.score)       # COMMENTARE QUESTA LINEA DI CODICE SE SI DESIDERA FARE L'ADDESTRAMENTO SENZA INTERFACCIA GRAFICA
     
-    return reward1sum / i, reward2sum / i 
+        duration_episode = time.time() - start_time
+    return reward1sum / i, reward2sum / i , duration_episode
 
 def run_learning_episode_q_sarsa(agent_1: AgentQ, agent_2: AgentSarsa):
     """Metodo che esegue un episodio di una partita q_learning vs sarsa"""
     pong = pongGame()
     reward1sum = 0
     reward2sum = 0
+    start_time = time.time()
     i = 0
 
     # prendo le posizioni della racchetta sinistra, della racchetta destra e le coordinate x e y della palla 
@@ -234,11 +250,12 @@ def run_learning_episode_q_sarsa(agent_1: AgentQ, agent_2: AgentSarsa):
             agent_2.score = agent_2.score + 1
             finish = True
 
-        #pong.draw(agent_1.score, agent_2.score)
+        # pong.draw(agent_1.score, agent_2.score)      # COMMENTARE QUESTA LINEA DI CODICE SE SI DESIDERA FARE L'ADDESTRAMENTO SENZA INTERFACCIA GRAFICA
         
-    return reward1sum / i, reward2sum / i
+        duration_episode = time.time() - start_time
+    return reward1sum / i, reward2sum / i , duration_episode
 
-def save(agent_1: Agent, agent_2: Agent):
+def save(agent_1: Agent, agent_2: Agent, rewards_avg1, rewards_avg2, durations_avg):
     """Funzione per salvare il modello"""
     if(isinstance(agent_1, AgentQ)):
         function_1 = agent_1.Q
@@ -250,7 +267,7 @@ def save(agent_1: Agent, agent_2: Agent):
     elif(isinstance(agent_2, AgentSarsa)):
         function_2 = agent_2.sarsa
 
-    result = {'agent_1': function_1, 'agent_2': function_2, 'agent_1_score': agent_1.score, 'agent_2_score': agent_2.score}
+    result = {'agent_1': function_1, 'agent_2': function_2, 'agent_1_score': agent_1.score, 'agent_2_score': agent_2.score, 'reward_avg1': rewards_avg1, 'reward_avg2': rewards_avg2, 'durations_avg': durations_avg}
     # Salva come file joblib con compressione
     if((isinstance(agent_1, AgentQ) and isinstance(agent_2, AgentQ))):
         filename = "training_q_agents.joblib"
