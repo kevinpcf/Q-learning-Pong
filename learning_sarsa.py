@@ -20,7 +20,7 @@ def progress_bar(progress: float):
 def main():
     window_height = 400
     window_width = 400
-    num_episodes = 10000
+    num_episodes = 8000
 
     agent_1 = AgentSarsa(window_width, window_height, 0.6, 0.2)
     agent_2 = AgentSarsa(window_width, window_height, 0.8, 0.1)
@@ -59,14 +59,14 @@ def main():
     fig2, ax2 = plt.subplots(figsize=(21, 5))
 
     # traccia il grafico delle ricompense medie
-    ax1.plot(range(10, 100000 + 1, 10)[:len(rewards_avg1)], rewards_avg1, label='Agente 1')
-    ax1.plot(range(10, 100000 + 1, 10)[:len(rewards_avg2)], rewards_avg2, label='Agente 2')
+    ax1.plot(range(10, 8000 + 1, 10)[:len(rewards_avg1)], rewards_avg1, label='Agente 1')
+    ax1.plot(range(10, 8000 + 1, 10)[:len(rewards_avg2)], rewards_avg2, label='Agente 2')
     ax1.set_xlabel('Episodio')
     ax1.set_ylabel('Ricompensa media')
     ax1.legend()
 
     # traccia il grafico delle durate medie degli episodi
-    ax2.plot(range(10, 100000 + 1, 10)[:len(durations_avg)], durations_avg, label='Durata media')
+    ax2.plot(range(10, 8000 + 1, 10)[:len(durations_avg)], durations_avg, label='Durata media')
     ax2.set_xlabel('Episodio')
     ax2.set_ylabel('Durata media (secondi)')
     ax2.legend()

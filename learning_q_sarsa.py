@@ -23,8 +23,8 @@ def main():
     window_width = 400
     num_episodes = 10000
 
-    agent_1 = AgentQ(window_width, window_height, 0.6, 0.2, 0.5)
-    agent_2 = AgentSarsa(window_width, window_height, 0.8, 0.1)
+    agent_1 = AgentQ(window_width, window_height, 0.8, 0.1, 0.2)
+    agent_2 = AgentSarsa(window_width, window_height, 0.6, 0.2)
 
     print("\nINZIO TRAINING")
     print("Progresso:\n")

@@ -1,5 +1,3 @@
 venv
 __pycache__
-training_q_agents.joblib
-training_sarsa_agents.joblib
-training_q_sarsa_agents.joblib
+
